@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,22 +9,28 @@ class Admincuenta extends StatefulWidget {
 }
 
 class AdmincuentaState extends State<Admincuenta> {
+  int? selectedRadio = 0;
+  @override
+  void initState() {
+    selectedRadio = 0;
+    super.initState();
+  }
+
+  setSelectedRadio(int? value) {
+    setState(() {
+      selectedRadio = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final value = true;
-    final valor = true;
+    bool _value = false;
+    dynamic val = -1;
+
+    final User? user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          Switch(
-            value: false,
-            activeColor: Colors.black,
-            onChanged: (value) {
-              Get.changeTheme(ThemeData.dark());
-            },
-          ),
-        ],
         leading: IconButton(
             onPressed: () {
               Get.offAllNamed('/home');
@@ -39,104 +46,44 @@ class AdmincuentaState extends State<Admincuenta> {
           child: Column(
             children: [
               Card(
-                child: Stack(children: [
-                  Positioned(
-                      top: 5.0,
-                      right: 5.0,
-                      child: Column(
-                        children: [
-                          Text(value ? 'Oscuro' : 'light'),
-                          Switch(
-                            value: value,
-                            activeColor: Colors.black,
-                            onChanged: (value) {
-                              setState(() {
-                                value = !value;
-                                value
-                                    ? Get.changeTheme(ThemeData.dark())
-                                    : Get.changeTheme(ThemeData.light());
-                              });
-                            },
+                child: Column(
+                  children: [
+                    user!.photoURL == '' || user.photoURL == null
+                        ? Icon(
+                            Icons.person,
+                            size: 200,
+                            color: Colors.grey,
+                          )
+                        : Image(
+                            width: 80.0,
+                            height: 80.0,
+                            image: NetworkImage('${user.photoURL}'),
                           ),
-                        ],
-                      )),
-                  SizedBox(height: 20),
-                  Column(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 200,
-                        color: Colors.grey,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text('Nombre: Juanita Perez'),
-                          Text('jperez@gmail.com'),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                    ],
-                  ),
-                ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text('Nombre: ${user.displayName ?? ''}',
+                            style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold)),
+                        Text('Email: ${user.email ?? ''}',
+                            style: TextStyle(
+                                color: Colors.blueGrey,
+                                fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    Text('Tel: ${user.phoneNumber ?? ''}',
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold)),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
               // mis direcciones
+
               ListTile(
-                  onTap: () {
-                    Get.dialog(
-                      Card(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 100.0, horizontal: 20.0),
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  leading:
-                                      Icon(Icons.add_location_alt_outlined),
-                                  title: Text('Mis Direcciones'),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 10.0),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        RadioListTile(
-                                            value: true,
-                                            groupValue: 1,
-                                            onChanged: (v) {},
-                                            title:
-                                                Text('Americo vespucio #5767')),
-                                        RadioListTile(
-                                            value: false,
-                                            groupValue: 2,
-                                            onChanged: (v) {},
-                                            title: Text('Av Portales #3045')),
-                                        SizedBox(height: 20.0),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(CupertinoIcons.add),
-                                              Text(
-                                                  'Agregar una nueva dirección')
-                                            ],
-                                          ),
-                                        ),
-                                      ]),
-                                ),
-                                SizedBox(height: 20.0),
-                              ],
-                            ),
-                          )),
-                    );
-                  },
+                  onTap: () => Get.to(misdirecciones()),
                   dense: true,
                   focusColor: Colors.grey[400],
                   selectedTileColor: Colors.grey,
@@ -173,8 +120,11 @@ class AdmincuentaState extends State<Admincuenta> {
                               ),
                               SizedBox(height: 20.0),
                               Container(
-                                child: _inputT(Icon(Icons.person, size: 13.0),
-                                    'Ingrese el nuevo nombre...', context,false),
+                                child: _inputT(
+                                    Icon(Icons.person, size: 13.0),
+                                    'Ingrese el nuevo nombre...',
+                                    context,
+                                    false),
                               ),
                               SizedBox(height: 20.0),
                               ElevatedButton(
@@ -275,7 +225,32 @@ class AdmincuentaState extends State<Admincuenta> {
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Divider(),
               ),
-
+              RadioListTile<int>(
+                groupValue: selectedRadio,
+                value: 1,
+                onChanged: (val) {
+                  print('selectedRadio: $selectedRadio');
+                  print('val: $val');
+                  // setSelectedRadio(val);
+                  setState(() {
+                    selectedRadio = val;
+                    Get.appUpdate();
+                  });
+                },
+              ),
+              RadioListTile<int>(
+                groupValue: selectedRadio,
+                value: 2,
+                onChanged: (val) {
+                  print('selectedRadio: $selectedRadio');
+                  print('val: $val');
+                  // setSelectedRadio(val);
+                  setState(() {
+                    selectedRadio = val;
+                    Get.appUpdate();
+                  });
+                },
+              ),
               // Eliminar cuenta
               ListTile(
                   onTap: () {
@@ -303,7 +278,7 @@ class AdmincuentaState extends State<Admincuenta> {
                                       Text(
                                           '¿Por qué quiere eliminar su cuenta?'),
                                       CheckboxListTile(
-                                        value: valor,
+                                        value: true,
                                         onChanged: (valor) {
                                           setState(() {
                                             if (valor == true) {
@@ -317,10 +292,10 @@ class AdmincuentaState extends State<Admincuenta> {
                                             Text('No me gustó la aplicación'),
                                       ),
                                       CheckboxListTile(
-                                        value: valor,
+                                        value: false,
                                         onChanged: (valor) {
                                           setState(() {
-                                           if (valor == true) {
+                                            if (valor == true) {
                                               valor = false;
                                             } else {
                                               valor = true;
@@ -391,7 +366,7 @@ class AdmincuentaState extends State<Admincuenta> {
           style: TextStyle(fontSize: 13.0, decoration: TextDecoration.none),
           keyboardType: TextInputType.emailAddress,
           cursorColor: Colors.grey,
-          obscureText: obscur ,
+          obscureText: obscur,
           decoration: InputDecoration(
               isDense: true,
               contentPadding: EdgeInsets.all(14),
@@ -408,5 +383,70 @@ class AdmincuentaState extends State<Admincuenta> {
                 borderSide: BorderSide.none,
               ))),
     );
+  }
+
+  Widget misdirecciones() {
+    return Scaffold(
+        body: Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ListTile(
+            leading: Icon(Icons.add_location_alt_outlined),
+            title: Text(
+              'Mis Direcciones',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RadioListTile<int>(
+                    groupValue: selectedRadio,
+                    value: 1,
+                    onChanged: (val) {
+                      print('selectedRadio: $selectedRadio');
+                      print('val: $val');
+                      // setSelectedRadio(val);
+                      setState(() {
+                        selectedRadio = val;
+                        Get.appUpdate();
+                      });
+                    },
+                  ),
+                  RadioListTile<int>(
+                    groupValue: selectedRadio,
+                    value: 2,
+                    onChanged: (val) {
+                      print('selectedRadio: $selectedRadio');
+                      print('val: $val');
+                      // setSelectedRadio(val);
+                      setState(() {
+                        selectedRadio = val;
+                        Get.appUpdate();
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.add),
+                        Text('Agregar una nueva dirección')
+                      ],
+                    ),
+                  ),
+                ]),
+          ),
+          SizedBox(height: 20.0),
+        ],
+      ),
+    ));
   }
 }

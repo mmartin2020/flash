@@ -13,21 +13,18 @@ class LoginController extends GetxController {
 
 //Code to signin with email and password
   Future<void> signInWithEmailAndPassword() async {
-    
     try {
-      final  user = (await _auth.signInWithEmailAndPassword(
+      final user = (await _auth.signInWithEmailAndPassword(
         email: _emailcontroller.text,
         password: _passwdcontroller.text,
       ));
-
-      Future.delayed(
-          Duration(seconds: 5),
-          () => Get.defaultDialog(
-                  content: Row(children: [
-                RefreshProgressIndicator(),
-                Text('Cargando...')
-              ])));
-      Get.offAllNamed('/home');
+      Get.defaultDialog(
+          content: RefreshProgressIndicator(),
+          backgroundColor: Colors.transparent,
+          title: '');
+      Future.delayed(Duration(seconds: 2), () {
+        Get.offAllNamed('/home');
+      });
     } catch (e) {
       print('$e');
       Get.snackbar(
@@ -82,9 +79,6 @@ class LoginController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     }
   }
-
-
-
 
   @override
   void dispose() {

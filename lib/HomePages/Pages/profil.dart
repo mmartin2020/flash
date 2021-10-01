@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 
 class Profil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    final User? user = FirebaseAuth.instance.currentUser;
+    return Container(
       child: ListView(
         children: [
           DrawerHeader(
@@ -14,22 +16,28 @@ class Profil extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 30.0, top: 30.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  (Icon(
-                    Icons.account_circle_sharp,
-                    size: 80.0,
-                  )),
+                  user!.photoURL == '' || user.photoURL == null
+                      ? Icon(Icons.account_circle_sharp,
+                          size: 80.0, color: Colors.grey)
+                      : Image(
+                          width: 80.0,
+                          height: 80.0,
+                          image: NetworkImage('${user.photoURL}'),
+                        ),
                   Column(
                     children: [
                       Text(
-                        'Janita Perez ',
+                        user.displayName ?? '',
                         style: TextStyle(
                           fontSize: 30.0,
                         ),
                         textAlign: TextAlign.justify,
                       ),
                       Text(
-                        'Email: jperez@gmail.com',
+                        user.email ?? '',
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -41,6 +49,8 @@ class Profil extends StatelessWidget {
                           },
                           child: Text('Administrar mi cuenta',
                               style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blueGrey,
                                 decoration: TextDecoration.underline,
                               ))),
                     ],
@@ -49,68 +59,64 @@ class Profil extends StatelessWidget {
               ),
             ),
           )),
-          ListTile(
-            title: Text('Mis favoritos'),
-            leading: Icon(Icons.favorite),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Mis favoritos', Icons.favorite, 'f'),
           Divider(),
-          ListTile(
-            title: Text('Mis Pedidos'),
-            leading: Icon(Icons.shopping_cart_outlined),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Mis Pedidos', Icons.shopping_cart_outlined, 'p'),
           Divider(),
-          ListTile(
-            title: Text('Soy repartidor'),
-            leading: Icon(Icons.delivery_dining_rounded),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Soy repartidor', Icons.delivery_dining_rounded, 'r'),
           Divider(),
-          ListTile(
-            title: Text('Soy negociante'),
-            leading: Icon(Icons.group),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Soy negociante', Icons.group, 'n'),
           Divider(),
-          ListTile(
-            title: Text('Soporte'),
-            leading: Icon(Icons.live_help_outlined),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Soporte', Icons.live_help_outlined, 's'),
           Divider(),
-          ListTile(
-            title: Text('Terminos y condiciones'),
-            leading: Icon(Icons.info),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Terminos y condiciones', Icons.info, 't'),
           Divider(),
-          ListTile(
-            onTap: () {
-              FirebaseAuth.instance.signOut().then((value) {
-                Future.delayed(Duration(seconds: 4), () {
-                  Get.defaultDialog(
-                    backgroundColor: null,
-                    content: Container(
-                      child: RefreshProgressIndicator(
-                        backgroundColor: Colors.transparent,
-                        color: Colors.black,
-                      ),
-                    ),
-                  );
-                  Get.offAllNamed('/login');
-                });
-              });
-            },
-            title: Text('Cerrar sessión'),
-            leading: Icon(
-              Icons.delete_rounded,
-            ),
-            trailing: Icon(Icons.arrow_forward_ios_sharp),
-          ),
+          _listTile('Cerrar sessión', Icons.delete_rounded, 'c'),
           Divider(),
         ],
       ),
+    );
+  }
+
+  Widget _listTile(String title, IconData icon, String onTap) {
+    return ListTile(
+      title: Text(title, style: TextStyle(color: Colors.blueGrey)),
+      leading: Icon(icon, color: Colors.blueGrey),
+      trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.blueGrey),
+      selectedTileColor: Colors.deepOrange.withOpacity(0.5),
+      onTap: () {
+        switch (onTap) {
+          case 'f':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 'p':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 'r':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 'n':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 's':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 't':
+            Get.toNamed('/misfavoritos');
+            break;
+          case 'c':
+            FirebaseAuth.instance.signOut().then((value) {
+              Get.defaultDialog(
+                  content: RefreshProgressIndicator(),
+                  backgroundColor: Colors.transparent.withOpacity(0.0),
+                  title: '');
+              Future.delayed(Duration(seconds: 2), () {
+                Get.offAllNamed('/login');
+              });
+            });
+            break;
+        }
+      },
     );
   }
 }

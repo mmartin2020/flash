@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:log/Data/PageSliderData.dart';
 
-
 import 'PageSlider.dart';
 
 class InitPage extends StatefulWidget {
@@ -32,12 +31,6 @@ class _InitPageState extends State<InitPage> {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
-
   _onPageChanged(int i) {
     setState(() {
       _currenPage = i;
@@ -46,7 +39,6 @@ class _InitPageState extends State<InitPage> {
 
   @override
   Widget build(BuildContext context) {
-  
     return Stack(alignment: AlignmentDirectional.bottomCenter, children: [
       PageView.builder(
         onPageChanged: _onPageChanged,
@@ -77,10 +69,10 @@ class _InitPageState extends State<InitPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                
                 Get.toNamed('/login');
               },
-              child: Text('Empezar a explorar',style:TextStyle(fontSize:17.0)),
+              child:
+                  Text('Empezar a explorar', style: TextStyle(fontSize: 17.0)),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Theme.of(context).primaryColor),
@@ -92,6 +84,12 @@ class _InitPageState extends State<InitPage> {
         ),
       )
     ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 }
 

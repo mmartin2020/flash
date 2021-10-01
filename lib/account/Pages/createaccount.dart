@@ -6,7 +6,8 @@ class CreateAccount extends GetWidget {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size.height;
-    CreateAccountController createAccountController = CreateAccountController();
+    final createAccountController =
+        Get.put<CreateAccountController>(CreateAccountController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -106,7 +107,7 @@ class CreateAccount extends GetWidget {
                             Theme.of(context).primaryColor)),
                     child: Text('Registrarse'),
                     onPressed: () {
-                      if (createAccountController.formkey.currentSate
+                      if (createAccountController.formkey.currentState
                           .validate()) createAccountController.register();
                     },
                   ),
