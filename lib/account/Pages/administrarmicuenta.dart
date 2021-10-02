@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:log/account/Controllers/models/UserModels.dart';
+import 'package:log/account/Controllers/createAccountController.dart';
 
 class Admincuenta extends StatefulWidget {
   @override
@@ -28,7 +31,14 @@ class AdmincuentaState extends State<Admincuenta> {
     dynamic val = -1;
 
     final User? user = FirebaseAuth.instance.currentUser;
-
+    final firebaseFireStore = FirebaseFirestore.instance;
+    Usermodels usermodel = Usermodels();
+    if (user != null)
+      firebaseFireStore.collection('Users').doc(user.uid).get().then((data) {
+        Usermodels.fromUser(data.data());
+        print(usermodel.phone);
+        print(usermodel.email);
+      }).catchError((e) => print('$e'));
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -62,7 +72,8 @@ class AdmincuentaState extends State<Admincuenta> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text('Nombre: ${user.displayName ?? ''}',
+                        Text(
+                            'Nombre: ${user.displayName ?? usermodel.name ?? ''}',
                             style: TextStyle(
                                 color: Colors.blueGrey,
                                 fontWeight: FontWeight.bold)),
@@ -72,7 +83,7 @@ class AdmincuentaState extends State<Admincuenta> {
                                 fontWeight: FontWeight.bold)),
                       ],
                     ),
-                    Text('Tel: ${user.phoneNumber ?? ''}',
+                    Text('Tel: ${user.phoneNumber ?? usermodel.phone ?? ''}',
                         style: TextStyle(
                             color: Colors.blueGrey,
                             fontWeight: FontWeight.bold)),
