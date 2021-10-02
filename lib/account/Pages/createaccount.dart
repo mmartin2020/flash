@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:log/account/Controllers/createAccountController.dart';
 
 class CreateAccount extends GetWidget {
+  final createAccountController =
+      Get.put<CreateAccountController>(CreateAccountController());
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size.height;
-    final createAccountController =
-        Get.put<CreateAccountController>(CreateAccountController());
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,7 +43,8 @@ class CreateAccount extends GetWidget {
                       ),
                       'Nombre Completo',
                       context,
-                      false),
+                      false,
+                      'na'),
 
                   SizedBox(height: 20.0),
 
@@ -55,7 +57,8 @@ class CreateAccount extends GetWidget {
                       ),
                       'Correo',
                       context,
-                      false),
+                      false,
+                      'em'),
 
                   SizedBox(height: 20.0),
 
@@ -68,7 +71,8 @@ class CreateAccount extends GetWidget {
                       ),
                       'Teléfono',
                       context,
-                      false),
+                      false,
+                      'ph'),
 
                   SizedBox(height: 20.0),
 
@@ -81,7 +85,8 @@ class CreateAccount extends GetWidget {
                       ),
                       'Contraseña',
                       context,
-                      true),
+                      true,
+                      'pa'),
 
                   SizedBox(height: 20.0),
 
@@ -94,7 +99,8 @@ class CreateAccount extends GetWidget {
                       ),
                       'Repetir la contraseña',
                       context,
-                      true),
+                      true,
+                      'pv'),
                   SizedBox(height: 40.0),
 
                   ElevatedButton(
@@ -138,11 +144,15 @@ class CreateAccount extends GetWidget {
   }
 
   Widget _inputT(TextEditingController _controller, Icon icon, String text,
-      BuildContext context, bool obscur) {
+      BuildContext context, bool obscur, String id) {
     return Container(
       child: TextFormField(
           validator: (valide) {
             if (valide!.isEmpty || valide == null) return 'Requerido';
+            if (createAccountController.passwdcontroller.text !=
+                    createAccountController.passwordverify.text &&
+                id == 'pv') return 'Las contraseña no coinciden';
+
             return null;
           },
           controller: _controller,
