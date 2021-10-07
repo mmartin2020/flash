@@ -42,7 +42,7 @@ class CreateAccountController extends GetxController {
                 'Confirmación', 'la cuenta ${user.email} fue creado con exito',
                 backgroundColor: Colors.deepOrange.withOpacity(0.3),
                 colorText: Colors.black));
-      }).catchError((e) => print('$e'));
+      });
     } else {
       Future.delayed(
           Duration(seconds: 2),
@@ -51,22 +51,6 @@ class CreateAccountController extends GetxController {
     }
   }
 
-//get data to cloudfirestore
-
-  // Future<void> getUser() async {
-  //   User? user = FirebaseAuth.instance.currentUser;
-
-  //   if (user != null)
-  //     await firebaseFireStore
-  //         .collection('Users')
-  //         .doc(_auth.currentUser?.uid)
-  //         .get()
-  //         .then((data) {
-  //       Usermodels.fromUser(data);
-  //     }).catchError((e) => print('$e'));
-  // }
-
-  //ge
 
   @override
   void dispose() {

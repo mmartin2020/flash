@@ -1,9 +1,9 @@
 class Usermodels {
   Usermodels({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.uid,
+    this.name,
+    this.email,
+    this.phone,
+    this.uid,
   });
 
   // factory map

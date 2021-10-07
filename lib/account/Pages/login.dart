@@ -198,7 +198,7 @@ class Login extends GetWidget {
       child: TextFormField(
           controller: textEditingController,
           validator: (String? value) {
-            if (value!.isEmpty || value == null) {
+            if (value!.isEmpty) {
               return "Obligatorio";
             } else if (_key == 'email' && !value.isEmail) {
               return "Email invalido";

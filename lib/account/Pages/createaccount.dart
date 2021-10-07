@@ -148,7 +148,7 @@ class CreateAccount extends GetWidget {
     return Container(
       child: TextFormField(
           validator: (valide) {
-            if (valide!.isEmpty || valide == null) return 'Requerido';
+            if (valide!.isEmpty) return 'Requerido';
             if (createAccountController.passwdcontroller.text !=
                     createAccountController.passwordverify.text &&
                 id == 'pv') return 'Las contraseña no coinciden';

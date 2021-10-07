@@ -14,7 +14,7 @@ class LoginController extends GetxController {
 //Code to signin with email and password
   Future<void> signInWithEmailAndPassword() async {
     try {
-      final user = (await _auth.signInWithEmailAndPassword(
+      (await _auth.signInWithEmailAndPassword(
         email: _emailcontroller.text,
         password: _passwdcontroller.text,
       ));
@@ -42,7 +42,7 @@ class LoginController extends GetxController {
       final AuthCredential credential = FacebookAuthProvider.credential(
         _tokenController.text,
       );
-      final user = (await _auth.signInWithCredential(credential)).user;
+      (await _auth.signInWithCredential(credential)).user;
       Get.snackbar('', 'Signin succefully',
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.black,
@@ -59,8 +59,6 @@ class LoginController extends GetxController {
 // Code to signin with google
   Future<void> signInWithGoogle() async {
     try {
-      UserCredential userCredential;
-
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -68,9 +66,7 @@ class LoginController extends GetxController {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      userCredential = await _auth.signInWithCredential(googleAuthCredential);
-
-      final user = userCredential.user;
+      await _auth.signInWithCredential(googleAuthCredential);
 
       Get.offAllNamed('/home');
     } catch (e) {

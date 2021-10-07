@@ -6,7 +6,6 @@ import 'HomePages/Pages/home.dart';
 import 'HomePages/Pages/masVendido.dart';
 import 'HomePages/Pages/offer.dart';
 import 'HomePages/Pages/search.dart';
-import 'account/Pages/administrarmicuenta.dart';
 import 'account/Pages/createaccount.dart';
 import 'account/Pages/forgetpassword.dart';
 import 'account/Pages/login.dart';
@@ -63,11 +62,7 @@ List<GetPage<dynamic>> routes = [
     page: () => Categoria(),
     title: '/details/categoria',
   ),
-  GetPage(
-    name: '/admincuenta',
-    page: () => Admincuenta(),
-    title: '/admincuenta',
-  ),
+
   GetPage(
     name: '/detailsproducts',
     page: () => Detailsproducts(),
