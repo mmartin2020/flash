@@ -29,7 +29,6 @@ class _HomeViewState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print(user?.providerData);
     return Scaffold(
       key: _scaffoldKey,
       drawer: Drawer(
@@ -73,70 +72,8 @@ class _HomeViewState extends State<Home> {
                                       fontSize: 16.0, color: Colors.grey),
                                 ),
                                 Spacer(),
-                                // Text(
-                                //     'Tel: ${user.phoneNumber == '' ? snapshots.data['phone'] == '' ? '' : snapshots.data['phone'] : user.phoneNumber}',
-                                //     style: TextStyle(
-                                //       fontSize: 16.0,
-                                //     )),
-
                                 telWidget(user, snapshots.data),
                                 Spacer(),
-                                GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                      Get.bottomSheet(Card(
-                                          child: Form(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(18.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text('Modificar mi perfil',
-                                                  style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              Spacer(),
-                                              TextFormField(),
-                                              Spacer(),
-                                              TextFormField(),
-                                              Spacer(),
-                                              TextFormField(),
-                                              Spacer(),
-                                              TextFormField(),
-                                              Spacer(),
-                                              ElevatedButton(
-                                                style: ButtonStyle(
-                                                    shape: MaterialStateProperty.all<
-                                                            RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20.0))),
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Theme.of(
-                                                                    context)
-                                                                .primaryColor)),
-                                                child: Text('Actualizar'),
-                                                onPressed: () {},
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )));
-                                    },
-                                    child: Center(
-                                      child: Text('Modificar mi perfil',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blueGrey,
-                                            decoration:
-                                                TextDecoration.underline,
-                                          )),
-                                    )),
                               ],
                             )
                           ],
@@ -171,8 +108,49 @@ class _HomeViewState extends State<Home> {
             Divider(),
             _listTile('Cerrar sessión', Icons.exit_to_app_outlined, 'c'),
             Divider(),
-            _listTile('Eliminar la cuenta', Icons.exit_to_app_outlined, 'e'),
-            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      Get.defaultDialog(
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text('Cancelar')),
+                            TextButton(
+                                onPressed: () {
+                                  user?.reload();
+                                  user?.delete();
+                                  Get.offNamed('/login');
+                                },
+                                child: Text('Confirmar'))
+                          ],
+                          content: Text(
+                              '¿Estás seguro de querer eliminar la cuenta?'),
+                          backgroundColor: Colors.white,
+                          title: 'Eliminar cuenta');
+                    },
+                    child: Text(
+                      'Eliminar la cuenta',
+                      style: TextStyle(color: Colors.blueGrey),
+                    )),
+                AbsorbPointer(
+                  absorbing: disableEnableButton(),
+                  child: OutlinedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Cambiar contraseña',
+                        style: TextStyle(
+                            color: disableEnableButton()
+                                ? Colors.grey
+                                : Colors.blueGrey),
+                      )),
+                )
+              ],
+            )
           ],
         ),
       ),
@@ -220,18 +198,59 @@ class _HomeViewState extends State<Home> {
     );
   }
 
-  Widget telWidget(User? user, map) {
-    if (user?.providerData.elementAt(0).providerId == 'google.com') {
-      return Text('Tel: ${user?.phoneNumber == '' ? '-' : user?.phoneNumber}',
-          style: TextStyle(
-            fontSize: 16.0,
-          ));
-    } else {
-      return Text('Tel: ${map['phone'] == '' ? '' : map['phone']}',
-          style: TextStyle(
-            fontSize: 16.0,
-          ));
+  String getProvider() {
+    switch (user?.providerData.elementAt(0).providerId) {
+      case 'google.com':
+        return 'google';
+
+      case 'facebook.com':
+        return 'facebook';
+
+      default:
+        return 'empty';
     }
+  }
+
+  bool disableEnableButton() {
+    if (getProvider() == 'empty') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Widget telWidget(User? user, map) {
+    String variable = '';
+    if (getProvider() == 'google') {
+      variable = 'Tel: ${user?.phoneNumber == '' ? '-' : user?.phoneNumber}';
+    } else {
+      variable = 'Tel: ${map['phone'] == '' ? '' : map['phone']}';
+    }
+    return GestureDetector(
+      onTap: () {
+        Get.bottomSheet(Card(
+            child: Column(children: [
+          Text('Modificar mi número de teléfono'),
+          TextFormField(
+            decoration: InputDecoration(hintText: variable),
+            keyboardType: TextInputType.phone,
+            controller: admincontroller.phonecontroller,
+          )
+        ])));
+      },
+      child: Row(
+        children: [
+          Text(variable,
+              style: TextStyle(
+                fontSize: 16.0,
+              )),
+          Icon(
+            Icons.edit,
+            size: 16.0,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _listTile(String title, IconData icon, String onTap) {
@@ -247,7 +266,8 @@ class _HomeViewState extends State<Home> {
       onTap: () {
         switch (onTap) {
           case 'f':
-            Get.toNamed('/misfavoritos');
+            // Get.toNamed('/misfavoritos');
+           
             break;
           case 'p':
             Get.toNamed('/misfavoritos');
@@ -274,27 +294,6 @@ class _HomeViewState extends State<Home> {
                 Get.offAllNamed('/login');
               });
             });
-            break;
-          case 'e':
-            Get.defaultDialog(
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: Text('Cancelar')),
-                  TextButton(
-                      onPressed: () {
-                        user?.reload();
-                        user?.delete();
-                        Get.offNamed('/login');
-                      },
-                      child: Text('Confirmar'))
-                ],
-                content: Text('¿Estás seguro de querer eliminar la cuenta?'),
-                backgroundColor: Colors.white,
-                title: 'Eliminar cuenta');
-
             break;
         }
       },

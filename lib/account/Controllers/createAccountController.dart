@@ -37,20 +37,22 @@ class CreateAccountController extends GetxController {
           .then((value) {
         formk.currentState?.reset();
         Future.delayed(
-            Duration(seconds: 2),
+            Duration(seconds: 1),
             () => Get.snackbar(
                 'Confirmación', 'la cuenta ${user.email} fue creado con exito',
-                backgroundColor: Colors.deepOrange.withOpacity(0.3),
-                colorText: Colors.black));
+                backgroundColor: Colors.black,
+                colorText: Colors.white,
+                icon: Icon(Icons.verified_user, color: Colors.green)));
       });
     } else {
       Future.delayed(
-          Duration(seconds: 2),
-          () => Get.snackbar('', 'Error en la creacion  de cuenta',
-              backgroundColor: Colors.red, colorText: Colors.white));
+          Duration(seconds: 1),
+          () => Get.snackbar('', 'Error en la creación  de cuenta',
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+              icon: Icon(Icons.warning, color: Colors.white)));
     }
   }
-
 
   @override
   void dispose() {

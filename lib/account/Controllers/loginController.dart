@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ class LoginController extends GetxController {
   static final _formkey = GlobalKey<FormState>();
   static final _tokenController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseFireStore = FirebaseFirestore.instance;
 
 //Code to signin with email and password
   Future<void> signInWithEmailAndPassword() async {
@@ -19,6 +21,7 @@ class LoginController extends GetxController {
         password: _passwdcontroller.text,
       ));
       Get.defaultDialog(
+          radius: 0.0,
           content: RefreshProgressIndicator(),
           backgroundColor: Colors.transparent,
           title: '');
@@ -27,11 +30,9 @@ class LoginController extends GetxController {
       });
     } catch (e) {
       print('$e');
-      Get.snackbar(
-        'Error',
-        '$e',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('Error', '$e',
+          snackPosition: SnackPosition.BOTTOM,
+          icon: Icon(Icons.warning, color: Colors.white));
     }
   }
 
@@ -66,7 +67,14 @@ class LoginController extends GetxController {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      await _auth.signInWithCredential(googleAuthCredential);
+      final UserCredential usercredential =
+          await _auth.signInWithCredential(googleAuthCredential);
+      firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
+        'name': usercredential.user?.displayName,
+        'email': usercredential.user?.email,
+        'phone': usercredential.user?.phoneNumber,
+        'uid': usercredential.user?.uid,
+      });
 
       Get.offAllNamed('/home');
     } catch (e) {
