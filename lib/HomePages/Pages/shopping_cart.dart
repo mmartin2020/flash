@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ShoppingCart extends StatelessWidget {
-
+  final productos = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Center(child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.sentiment_very_dissatisfied,size: 200.0,color: Colors.grey,),
-            Text('Upss! aun no tiene nada agregado en este espacio')
-          ],
-        ),),
-      ),
-    );
+        body: Container(
+            child: StreamBuilder<List<ListTile>>(
+                stream: sendProducts([]),
+                builder: (context, snapshot) {
+                  return ListView(
+                    children: snapshot.data!.toList(),
+                  );
+                })));
+  }
+
+  Stream<List<ListTile>> sendProducts(lista) {
+    return lista;
   }
 }

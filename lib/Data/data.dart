@@ -1,5 +1,5 @@
 Map<String, dynamic> productos = {
-  "descubrir": {
+  "descubrir": [
     {
       'idproducts': 'A01',
       'titulo': 'Papas Fritas',
@@ -75,8 +75,8 @@ Map<String, dynamic> productos = {
       'medida': 'c/u',
       'marca': ''
     }
-  },
-  "masvendido": {
+  ],
+  "masvendido": [
     {
       'idproducts': 'A08',
       'titulo': 'Coca-cola',
@@ -107,9 +107,8 @@ Map<String, dynamic> productos = {
       'precio': '700',
       'medida': '/kg'
     }
-  },
-//  Variedad de productos
-  "variedades": {
+  ],
+  "variedades": [
     {
       'idproducts': 'A011',
       'titulo': 'Cereales y patatas',
@@ -165,22 +164,20 @@ Map<String, dynamic> productos = {
       'medida': '',
       'marca': ''
     }
-  },
-// Recomendada
-  "recomendado": {
-    
-      {
-        'idproducts': 'A016',
-        'titulo': 'Detergente VALOR magic',
-        'subtitulo': "detergente 5LT",
-        'image': 'lib/assets/images/detergente3.jpg',
-        'calificacion': '3.8 ',
-        'clasificacion_total': '',
-        'precio': '2.200',
-        'medida': 'c/u',
-        'marca': 'Magic'
-      },
-       {
+  ],
+  "recomendado": [
+    {
+      'idproducts': 'A016',
+      'titulo': 'Detergente VALOR magic',
+      'subtitulo': "detergente 5LT",
+      'image': 'lib/assets/images/detergente3.jpg',
+      'calificacion': '3.8 ',
+      'clasificacion_total': '',
+      'precio': '2.200',
+      'medida': 'c/u',
+      'marca': 'Magic'
+    },
+    {
       'idproducts': 'A08',
       'titulo': 'Coca-cola',
       'subtitulo': 'Bebida 1,5 lt desechable',
@@ -190,19 +187,18 @@ Map<String, dynamic> productos = {
       'precio': '1.800',
       'medida': 'c/u'
     },
-    
-      {
-        'idproducts': 'A017',
-        'titulo': 'Detergente matic polvo',
-        'subtitulo': "polvo 15 kilos bolsa",
-        'image': 'lib/assets/images/detergente2.jpg',
-        'calificacion': '3.8 ',
-        'clasificacion_total': '',
-        'precio': '20.990',
-        'medida': 'c/u',
-        'marca': 'magic'
-      },
-      {
+    {
+      'idproducts': 'A017',
+      'titulo': 'Detergente matic polvo',
+      'subtitulo': "polvo 15 kilos bolsa",
+      'image': 'lib/assets/images/detergente2.jpg',
+      'calificacion': '3.8 ',
+      'clasificacion_total': '',
+      'precio': '20.990',
+      'medida': 'c/u',
+      'marca': 'magic'
+    },
+    {
       'idproducts': '09',
       'titulo': 'Café instantáneo',
       'subtitulo': 'Nescafé tradición lata 170 g',
@@ -212,17 +208,16 @@ Map<String, dynamic> productos = {
       'precio': '4.500',
       'medida': 'c/u'
     },
-      {
-        'idproducts': 'A018',
-        'titulo': 'Pack Detergente',
-        'subtitulo': "Pack detergente 3lt OMO",
-        'image': 'lib/assets/images/detergente4.jpg',
-        'calificacion': '3.8 ',
-        'clasificacion_total': '',
-        'precio': '14.500',
-        'medida': 'c/u',
-        'marca': 'Omo'
-      },
-    }
-  
+    {
+      'idproducts': 'A018',
+      'titulo': 'Pack Detergente',
+      'subtitulo': "Pack detergente 3lt OMO",
+      'image': 'lib/assets/images/detergente4.jpg',
+      'calificacion': '3.8 ',
+      'clasificacion_total': '',
+      'precio': '14.500',
+      'medida': 'c/u',
+      'marca': 'Omo'
+    },
+  ]
 };

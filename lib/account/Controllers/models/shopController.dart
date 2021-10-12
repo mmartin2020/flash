@@ -44,7 +44,7 @@ final shopRef = FirebaseFirestore.instance
 
     shopRef.snapshots().listen((event) {
       
-     List documents =   event.docs.toList();
+     
      
     });
 }
