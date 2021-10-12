@@ -1,10 +1,14 @@
 import 'package:get/get.dart';
+import 'package:log/HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/categoria.dart';
 import 'HomePages/Pages/condiciones.dart';
 import 'HomePages/Pages/detailsProducts.dart';
 import 'HomePages/Pages/home.dart';
 import 'HomePages/Pages/masVendido.dart';
+import 'HomePages/Pages/mispedidos.dart';
+import 'HomePages/Pages/myfavorites.dart';
 import 'HomePages/Pages/offer.dart';
+import 'HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/search.dart';
 import 'account/Pages/createaccount.dart';
 import 'account/Pages/forgetpassword.dart';
@@ -67,5 +71,21 @@ List<GetPage<dynamic>> routes = [
     name: '/detailsproducts',
     page: () => Detailsproducts(),
     title: '/detailsproducts',
-  )
+  ), GetPage(
+    name: '/shopview',
+    page: () => ShopView(),
+    title: 'ShopView',
+  ),
+
+ GetPage(
+    name: '/favorite',
+    page: () => Favorite(),
+    title: 'favorite',
+  ),
+   GetPage(
+    name: '/mispedidos',
+    page: () => Pedidos(),
+    title: 'pedidos',
+  ),
+
 ];

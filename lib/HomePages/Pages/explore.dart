@@ -16,9 +16,7 @@ class Explore extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+        
               GestureDetector(
                 onTap: () => Get.toNamed('/search'),
                 child: Container(
@@ -33,29 +31,14 @@ class Explore extends StatelessWidget {
                   ]),
                 ),
               ),
-              Column(
-                children: [
-                  IconButton(
-                    highlightColor: Colors.grey,
-                    splashColor: Colors.grey[100],
-                    constraints: BoxConstraints(maxHeight: 20.0),
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.add_location_alt_rounded,
-                      textDirection: TextDirection.ltr,
-                      size: 15.0,
-                    ),
-                  ),
-                  Text('Americo Vespucio #0484',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(fontSize: 10.0)),
-                  Text('Dirección de despacho',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 7.0)),
-                ],
-              )
-            ],
-          ),
+              ListTile(onTap: (){
+
+Get.bottomSheet(BottomSheet(onClosing: (){print('Closing');}, builder: (_)=>Container()));
+
+              },dense: true,leading: Icon(Icons.add_location_alt),trailing: Icon(Icons.add), subtitle: Text('Dirección de despacho'),title: Text('Americo vespucio #0484'),),
+           
+       
+         
           SizedBox(height: 10.0),
           Flexible(
             child: CustomScrollView(
@@ -65,7 +48,7 @@ class Explore extends StatelessWidget {
                     // descubrir nuevas cosas
                     _textTitle(
                       'Descubrir cosas nuevas',
-                      20.0,
+                      17.0,
                     ),
                     SizedBox(height: 20.0),
                     _listNuevasCosas(),

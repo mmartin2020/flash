@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -60,6 +59,8 @@ class LoginController extends GetxController {
 // Code to signin with google
   Future<void> signInWithGoogle() async {
     try {
+      _auth.signOut();
+      //await GoogleSignIn().disconnect();
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -67,9 +68,11 @@ class LoginController extends GetxController {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final UserCredential usercredential =
+
+      
+     final UserCredential usercredential =
           await _auth.signInWithCredential(googleAuthCredential);
-      firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
+       firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': usercredential.user?.displayName,
         'email': usercredential.user?.email,
         'phone': usercredential.user?.phoneNumber,

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-// import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:log/account/Controllers/forgetpasswordcontroller.dart';
 
 class Forgetpassword extends StatelessWidget {
+  final forgetPasswordController = Get.put(ForgetPasswordController());
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
+  
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -28,8 +30,9 @@ class Forgetpassword extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30.0),
-            _inputT(Icon(Icons.email_outlined, size: 13.0),
-                'Ingresa tu email...', context,false),
+            Form(key: forgetPasswordController.formkey, child: _inputT(Icon(Icons.email_outlined, size: 13.0),
+                'Ingresa tu email...', context,false),),
+            
             SizedBox(height: 30.0),
             ElevatedButton(
               style: ButtonStyle(
@@ -40,29 +43,10 @@ class Forgetpassword extends StatelessWidget {
                       Theme.of(context).primaryColor)),
               child: Text('Enviar'),
               onPressed: () {
-                Get.dialog(AlertDialog(
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('/login');
-                        },
-                        child: Text('Cancelar')),
-                    ElevatedButton(
-                        onPressed: () {
-                          Get.toNamed('/login');
-                        },
-                        child: Text('Confirmar'))
-                  ],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  content: Card(
-                      elevation: 0.0,
-                      child: Text(
-                        'Confirmar solicitud de la recuperación de su cuenta',
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      )),
-                ));
+                if(forgetPasswordController.formkey.currentState!.validate())
+                forgetPasswordController.forgetpassword();
+                ;
+          
               },
             ),
             SizedBox(height: 60.0),
@@ -76,7 +60,13 @@ class Forgetpassword extends StatelessWidget {
 
   Widget _inputT(Icon icon, String text, BuildContext context, bool obscur) {
     return Container(
-      child: TextField(
+      child: TextFormField(
+        controller: forgetPasswordController.email,
+        validator: (e){
+if(e!.isEmpty) return '* Debes completar el campo';
+if(!e.isEmail) return '* Email invalido';
+return null;
+        },
           textInputAction: TextInputAction.next,
           style: TextStyle(fontSize: 13.0, decoration: TextDecoration.none),
           keyboardType: TextInputType.emailAddress,

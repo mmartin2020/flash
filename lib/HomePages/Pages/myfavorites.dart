@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-class Offer extends StatelessWidget {
+class Favorite extends StatelessWidget {
   
 
   @override
