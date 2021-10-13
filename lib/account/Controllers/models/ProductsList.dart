@@ -1,10 +1,16 @@
 import 'package:get/get.dart';
-import 'package:log/account/Controllers/models/productModels.dart';
 
 class ProductsList extends GetxController {
-  ProductsList({this.productsList});
+  // List<ListTile> prductsListTile.obs;
+  var counter = 0.obs;
 
-  ProductsList.formWebServices(Map<String, dynamic> toWS) : this();
+  void increment() {
+    counter++;
+    update();
+  }
 
-  List<Products>? productsList;
+  void discrement() {
+    if (counter > 0) counter--;
+    update();
+  }
 }

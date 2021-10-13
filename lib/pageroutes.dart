@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:log/HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/categoria.dart';
 import 'HomePages/Pages/condiciones.dart';
-import 'HomePages/Pages/detailsProducts.dart';
 import 'HomePages/Pages/home.dart';
 import 'HomePages/Pages/masVendido.dart';
 import 'HomePages/Pages/mispedidos.dart';
@@ -10,6 +9,7 @@ import 'HomePages/Pages/myfavorites.dart';
 import 'HomePages/Pages/offer.dart';
 import 'HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/search.dart';
+import 'HomePages/Pages/shopping_cart.dart';
 import 'account/Pages/createaccount.dart';
 import 'account/Pages/forgetpassword.dart';
 import 'account/Pages/login.dart';
@@ -28,7 +28,7 @@ List<GetPage<dynamic>> routes = [
   ),
   GetPage(
     name: '/home',
-    page: () => Home(),
+    page: () => Home(0),
     title: 'HomeView',
   ),
   GetPage(
@@ -66,26 +66,24 @@ List<GetPage<dynamic>> routes = [
     page: () => Categoria(),
     title: '/details/categoria',
   ),
-
   GetPage(
-    name: '/detailsproducts',
-    page: () => Detailsproducts(),
-    title: '/detailsproducts',
-  ), GetPage(
     name: '/shopview',
     page: () => ShopView(),
     title: 'ShopView',
   ),
-
- GetPage(
+  GetPage(
     name: '/favorite',
     page: () => Favorite(),
     title: 'favorite',
   ),
-   GetPage(
+  GetPage(
     name: '/mispedidos',
     page: () => Pedidos(),
     title: 'pedidos',
   ),
-
+  GetPage(
+    name: '/shoppingCart',
+    page: () => ShoppingCart(),
+    title: 'ShoppingCart',
+  ),
 ];

@@ -32,16 +32,15 @@ class AdminController extends GetxController {
           .collection('Users')
           .doc(user?.uid)
           .update({'phone': '$number'});
-       Get.snackbar(
-                'Actualizado', '',
-                backgroundColor: Colors.black,
-                colorText: Colors.white,
-                icon: Icon(Icons.verified_user, color: Colors.green));
-    } catch (e) {Get.snackbar('Error', '$e');}
+      Get.snackbar('Actualizado', '',
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          icon: Icon(Icons.verified_user, color: Colors.green));
+      update();
+    } catch (e) {
+      Get.snackbar('Error', '$e');
+    }
   }
-
-
- 
 
   @override
   void dispose() {

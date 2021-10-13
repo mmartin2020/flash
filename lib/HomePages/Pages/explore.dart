@@ -1,15 +1,17 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:log/HomePages/Pages/home.dart';
+import 'package:log/account/Controllers/models/ProductsList.dart';
 
-class Explore extends StatelessWidget {
+class Explore extends GetWidget<ProductsList> {
   final List<ListTile> productslist = [];
+
+  final indexo = 3;
+  final details = Get.put(ProductsList());
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-
     return Scaffold(
         body: SafeArea(
       child: Padding(
@@ -31,11 +33,7 @@ class Explore extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              Get.bottomSheet(BottomSheet(
-                  onClosing: () {
-                    print('Closing');
-                  },
-                  builder: (_) => Container()));
+              Get.bottomSheet(Container());
             },
             dense: true,
             leading: Icon(Icons.add_location_alt),
@@ -116,25 +114,18 @@ class Explore extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       String _txtDescripcionPoroductos =
                           elements[index]["subtitulo"];
-                      String price = elements[rando[index]]["precio"];
+                      String price =
+                          numberFormat(elements[rando[index]]["precio"]);
                       String unidad = elements[rando[index]]["medida"];
                       String image = elements[rando[index]]["image"];
                       String titulo = elements[rando[index]]["titulo"];
-                      String calif = elements[rando[index]]["calificacion"];
+                      String calif =
+                          elements[rando[index]]["calificacion"].trim();
                       String califtotal =
-                          elements[index]["clasificacion_total"];
+                          elements[index]["clasificacion_total"].trim();
 
                       return GestureDetector(
                           onTap: () {
-                            /* Get.toNamed('/detailsproducts', arguments: {
-                            'image': image,
-                            'titulo': titulo,
-                            'subtitulo': _txtDescripcionPoroductos,
-                            'calif': calif,
-                            'precio': price,
-                            'califtotal': califtotal,
-                            'medida': unidad
-                          });*/
                             Get.bottomSheet(
                               Container(
                                 decoration: BoxDecoration(
@@ -142,71 +133,173 @@ class Explore extends StatelessWidget {
                                     borderRadius: BorderRadiusDirectional.only(
                                         topStart: Radius.circular(20),
                                         topEnd: Radius.circular(20))),
-                                height: 700.0,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      child: Image(
-                                        image: AssetImage('$image'),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Text(
-                                              '$titulo',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text('$_txtDescripcionPoroductos'),
-                                          ],
+                                height: 400.0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        child: Image(
+                                          width: 200,
+                                          height: 200,
+                                          alignment: Alignment.center,
+                                          image: AssetImage('$image'),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              '$califtotal $calif Calificaciones',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              '$price',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Row(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {print('negatif');},
-                                                  icon: Icon(
-                                                    Icons.remove,
-                                                    size: 16.0,
-                                                  ),
-                                                ),
-                                                Text('1',
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 100.0,
+                                            height: 120.0,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '$titulo',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
                                                         fontWeight:
-                                                            FontWeight.bold)),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    print('positif');
-                                                  },
-                                                  icon: Icon(Icons.add),
-                                                )
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text(
+                                                      '$_txtDescripcionPoroductos'),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            '\$$price',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.star,
+                                                      size: 16.0,
+                                                      color: Colors.yellow),
+                                                  Text(
+                                                    '$calif Calificaciones',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      details.discrement();
+                                                      print(details.counter);
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.remove,
+                                                      size: 19.0,
+                                                    ),
+                                                  ),
+                                                  GetX<ProductsList>(
+                                                      builder: (context) {
+                                                    return Text(
+                                                        '${details.counter}',
+                                                        style: TextStyle(
+                                                            fontSize: 19.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold));
+                                                  }),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      details.increment();
+                                                      print(details.counter);
+                                                    },
+                                                    icon: Icon(Icons.add,
+                                                        size: 19.0),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Home(2)));
+                                        },
+                                        child: Container(
+                                          width: 300.0,
+                                          height: 55.0,
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.shopping_bag,
+                                                      size: 30,
+                                                      color: Colors.white38,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 10.0),
+                                                      child: VerticalDivider(
+                                                        color: Colors.white38,
+                                                        width: 10.0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Agregar y ir al carrito',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Icon(
+                                                        Icons
+                                                            .arrow_forward_ios_sharp,
+                                                        size: 12.0,
+                                                        color: Colors.white54)
+                                                  ],
+                                                ),
+                                                GetX<ProductsList>(
+                                                    builder: (context) {
+                                                  return Text(
+                                                    'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  );
+                                                })
                                               ],
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Container(
-                                      child:
-                                          Text('Total: 22333  ir al carrito'),
-                                    )
-                                  ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -379,7 +472,7 @@ class Explore extends StatelessWidget {
                   String titulo = elements[rando[index]]["titulo"];
                   String subtitulo = elements[rando[index]]["subtitulo"];
                   String calif = elements[rando[index]]["calificacion"];
-                  String precio = elements[rando[index]]["precio"];
+                  String price = numberFormat(elements[rando[index]]["precio"]);
                   String califtotal =
                       elements[rando[index]]["clasificacion_total"];
                   String medida = elements[rando[index]]["medida"];
@@ -387,15 +480,182 @@ class Explore extends StatelessWidget {
                   return Container(
                       child: ListTile(
                           onTap: () {
-                            Get.toNamed('/detailsproducts', arguments: {
-                              'image': image,
-                              'titulo': titulo,
-                              'subtitulo': subtitulo,
-                              'calif': calif,
-                              'precio': precio,
-                              'califtotal': califtotal,
-                              'medida': medida
-                            });
+                            Get.bottomSheet(
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadiusDirectional.only(
+                                        topStart: Radius.circular(20),
+                                        topEnd: Radius.circular(20))),
+                                height: 400.0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        child: Image(
+                                          width: 200,
+                                          height: 200,
+                                          alignment: Alignment.center,
+                                          image: AssetImage('$image'),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 100.0,
+                                            height: 120.0,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '$titulo',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  Text('$subtitulo'),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            '\$$price',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.star,
+                                                      size: 16.0,
+                                                      color: Colors.yellow),
+                                                  Text(
+                                                    '$calif Calificaciones',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      details.discrement();
+                                                      print(details.counter);
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.remove,
+                                                      size: 19.0,
+                                                    ),
+                                                  ),
+                                                  GetX<ProductsList>(
+                                                      builder: (context) {
+                                                    return Text(
+                                                        '${details.counter}',
+                                                        style: TextStyle(
+                                                            fontSize: 19.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold));
+                                                  }),
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      details.increment();
+                                                      print(details.counter);
+                                                    },
+                                                    icon: Icon(Icons.add,
+                                                        size: 19.0),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Home(2)));
+                                        },
+                                        child: Container(
+                                          width: 300.0,
+                                          height: 55.0,
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.shopping_bag,
+                                                      size: 30,
+                                                      color: Colors.white38,
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 10.0),
+                                                      child: VerticalDivider(
+                                                        color: Colors.white38,
+                                                        width: 10.0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Agregar y ir al carrito',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16.0,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Icon(
+                                                        Icons
+                                                            .arrow_forward_ios_sharp,
+                                                        size: 12.0,
+                                                        color: Colors.white54)
+                                                  ],
+                                                ),
+                                                GetX<ProductsList>(
+                                                    builder: (context) {
+                                                  return Text(
+                                                    'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  );
+                                                })
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                           contentPadding: EdgeInsets.all(15),
                           isThreeLine: true,
@@ -429,7 +689,7 @@ class Explore extends StatelessWidget {
                                   children: [
                                     Container(
                                       child: Text(
-                                        '\$${precio + ' ' + medida}',
+                                        '\$${price + ' ' + medida}',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold,
@@ -575,5 +835,18 @@ class Explore extends StatelessWidget {
       }
     }
     return lista;
+  }
+
+  String numberFormat(x) {
+    List<String> parts = x.toString().split('.');
+    RegExp re = RegExp(r'\B(?=(\d{3})+(?!\d))');
+
+    parts[0] = parts[0].replaceAll(re, '.');
+    if (parts.length == 1) {
+      parts.add('00');
+    } else {
+      parts[1] = parts[1].padRight(2, '0').substring(0, 2);
+    }
+    return parts.join(',');
   }
 }

@@ -19,6 +19,7 @@ class LoginController extends GetxController {
         email: _emailcontroller.text,
         password: _passwdcontroller.text,
       ));
+
       Get.defaultDialog(
           radius: 0.0,
           content: RefreshProgressIndicator(),
@@ -69,10 +70,9 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      
-     final UserCredential usercredential =
+      final UserCredential usercredential =
           await _auth.signInWithCredential(googleAuthCredential);
-       firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
+      firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': usercredential.user?.displayName,
         'email': usercredential.user?.email,
         'phone': usercredential.user?.phoneNumber,
