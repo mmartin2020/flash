@@ -40,95 +40,136 @@ class _HomeViewState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size.width;
+    final snap = FirebaseFirestore.instance
+        .collection("Users")
+        .doc(user?.uid)
+        .snapshots();
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-                child: Card(
-              margin: EdgeInsets.all(10.0),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection("Users")
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshots) {
-                      if (snapshots.connectionState == ConnectionState.done) {
-                        if (snapshots.hasData) {
-                          final data = snapshots.requireData;
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              user!.photoURL == '' || user?.photoURL == null
-                                  ? Icon(Icons.account_circle_sharp,
-                                      size: 80.0, color: Colors.grey)
-                                  : CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage('${user?.photoURL}'),
-                                    ),
-                              Spacer(),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${user?.displayName == '' || user?.displayName == null ? snapshots.data['name'] : user?.displayName}',
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    user?.email ?? '',
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: Colors.grey),
-                                  ),
-                                  Spacer(),
-                                  telWidget(user, snapshots.data),
-                                  Spacer(),
-                                ],
-                              )
-                            ],
-                          );
-                        }
+      drawer: Container(
+        width: media / 1.5,
+        child: Drawer(
+          child: ListView(
+            children: [
+              StreamBuilder(
+                  stream: snap,
+                  builder: (context, snapshots) {
+                    if (snapshots.hasError) Text('!!Connection Failed!!');
+                    if (snapshots.connectionState == ConnectionState.active) {
+                      if (snapshots.hasData) {
+                        return DrawerHeader(
+                            child: Card(
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        user!.photoURL == '' ||
+                                                user?.photoURL == null
+                                            ? Icon(Icons.account_circle_sharp,
+                                                size: media * 0.12,
+                                                color: Colors.deepOrange
+                                                    .withOpacity(0.2))
+                                            : CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    '${user?.photoURL}'),
+                                              ),
+                                        SizedBox(
+                                          width: 7.0,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${user?.displayName == '' || user?.displayName == null ? getUserName(snapshots.data) : user?.displayName}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: media * 0.05,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                            SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Text(
+                                              user?.email ?? '',
+                                              style: TextStyle(
+                                                  fontSize: media * 0.03,
+                                                  color: Colors.grey),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                            SizedBox(
+                                              height: 8.0,
+                                            ),
+                                            telWidget(user, snapshots.data),
+                                          ],
+                                        )
+                                      ],
+                                    ))));
                       }
-                      if (snapshots.connectionState == ConnectionState.waiting)
-                        return Center(
-                          child: Container(
-                            child: RefreshProgressIndicator(),
-                          ),
-                        );
+                    }
 
+                    if (snapshots.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: Container(
-                          child: RefreshProgressIndicator(),
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.transparent,
+                          ),
                         ),
                       );
-                    }),
+                    }
+
+                    return Center(
+                      child: Container(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    );
+                  }),
+              _listTile('Mis favoritos', Icons.favorite, 'f'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
               ),
-            )),
-            _listTile('Mis favoritos', Icons.favorite, 'f'),
-            Divider(),
-            _listTile('Mis Pedidos', Icons.shopping_cart_outlined, 'p'),
-            Divider(),
-            _listTile('Soy repartidor', Icons.delivery_dining_rounded, 'r'),
-            Divider(),
-            _listTile('Soy negociante', Icons.group, 'n'),
-            Divider(),
-            _listTile('Soporte', Icons.live_help_outlined, 's'),
-            Divider(),
-            _listTile('Terminos y condiciones', Icons.info, 't'),
-            Divider(),
-            _listTile('Cerrar sessión', Icons.exit_to_app_outlined, 'c'),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                OutlinedButton(
+              _listTile('Mis Pedidos', Icons.shopping_cart_outlined, 'p'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              _listTile('Soy repartidor', Icons.delivery_dining_rounded, 'r'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              _listTile('Soy negociante', Icons.group, 'n'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              _listTile('Soporte', Icons.live_help_outlined, 's'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              _listTile('Terminos y condiciones', Icons.info, 't'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              _listTile('Cerrar sessión', Icons.exit_to_app_outlined, 'c'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                child: Divider(),
+              ),
+              Container(
+                width: media / 1.5,
+                child: OutlinedButton(
                     onPressed: () {
                       Get.defaultDialog(
                           radius: 0.0,
@@ -155,9 +196,9 @@ class _HomeViewState extends State<Home> {
                       'Eliminar la cuenta',
                       style: TextStyle(color: Colors.blueGrey),
                     )),
-              ],
-            )
-          ],
+              ),
+            ],
+          ),
         ),
       ),
       body: IndexedStack(
@@ -217,18 +258,11 @@ class _HomeViewState extends State<Home> {
     }
   }
 
-  bool disableEnableButton() {
-    if (getProvider() == 'empty') {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   Widget telWidget(User? user, map) {
     String variable = '';
     if (getProvider() == 'google') {
-      variable = 'Tel: ${user?.phoneNumber == '' ? '-' : user?.phoneNumber}';
+      variable =
+          'Tel: ${user?.phoneNumber == '' || user?.phoneNumber == null ? map['phone'] : user?.phoneNumber}';
     } else {
       variable = 'Tel: ${map['phone'] == '' ? '' : map['phone']}';
     }
@@ -298,15 +332,19 @@ class _HomeViewState extends State<Home> {
     );
   }
 
+  String getUserName(map) {
+    return map['name'];
+  }
+
   Widget _listTile(String title, IconData icon, String onTap) {
     return ListTile(
-      title: Text(title,
-          style:
-              TextStyle(color: onTap == 'e' ? Colors.grey : Colors.blueGrey)),
-      leading: onTap == 'e' ? null : Icon(icon, color: Colors.blueGrey),
-      trailing: onTap == 'e'
-          ? null
-          : Icon(Icons.arrow_forward_ios_outlined, color: Colors.blueGrey),
+      title: Text(title, style: TextStyle(color: Colors.blueGrey)),
+      leading: Icon(icon, color: Colors.blueGrey),
+      trailing: Icon(
+        Icons.arrow_forward_ios_outlined,
+        color: Colors.blueGrey,
+        size: 12.0,
+      ),
       selectedTileColor: Colors.deepOrange.withOpacity(0.5),
       onTap: () {
         switch (onTap) {

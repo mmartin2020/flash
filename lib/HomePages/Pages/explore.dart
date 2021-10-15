@@ -37,7 +37,7 @@ class Explore extends GetWidget<ProductsList> {
             },
             dense: true,
             leading: Icon(Icons.add_location_alt),
-            trailing: Icon(Icons.add),
+            trailing: Icon(Icons.arrow_drop_down_outlined),
             subtitle: Text('Dirección de despacho'),
             title: Text('Americo vespucio #0484'),
           ),
@@ -47,25 +47,21 @@ class Explore extends GetWidget<ProductsList> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate([
+                    SizedBox(height: 8.0),
+                    _listVariedades(),
+                    SizedBox(height: 8.0),
                     // descubrir nuevas cosas
                     _textTitle(
-                      'Descubrir cosas nuevas',
+                      'Productos destacados',
                       17.0,
                     ),
                     SizedBox(height: 20.0),
                     _listNuevasCosas(),
                     SizedBox(height: 10.0),
                     // Mas vendidos
-                    _textTitle(
-                        'Productos más vendidos', 17.0, fila('masVendido')),
+                    _textTitle('Más productos', 17.0),
                     SizedBox(height: 20.0),
                     _listMasVendidos(),
-
-                    //  Variedad de productos
-                    _textTitle(
-                        'Variedades de productos', 17.0, fila('categoria')),
-                    SizedBox(height: 20.0),
-                    _listVariedades(),
                   ]),
                 )
               ],
@@ -90,7 +86,7 @@ class Explore extends GetWidget<ProductsList> {
 //lista nuevas cosas
   Widget _listNuevasCosas() {
     return Container(
-      height: 240,
+      height: 270,
       child: //
           StreamBuilder(
               stream:
@@ -309,10 +305,14 @@ class Explore extends GetWidget<ProductsList> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
+                                  // image productos
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black, width: 2.0)),
                                     child: Image(
                                         errorBuilder:
                                             (context, error, stackTrace) =>
@@ -340,7 +340,7 @@ class Explore extends GetWidget<ProductsList> {
                                     child: Text(
                                         _txtDescripcionPoroductos.length > 40
                                             ? _txtDescripcionPoroductos
-                                                    .substring(0, 37) +
+                                                    .substring(0, 25) +
                                                 '...'
                                             : _txtDescripcionPoroductos,
                                         textAlign: TextAlign.justify,
@@ -365,67 +365,62 @@ class Explore extends GetWidget<ProductsList> {
                                               fontWeight: FontWeight.w500)),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      // Add to shoppingcart
-                                      GestureDetector(
-                                          onTap: () {
-                                            productslist.add(ListTile(
-                                                leading: Image.asset('$image'),
-                                                title: Row(
-                                                  children: [
-                                                    Text('$titulo'),
-                                                    Text('$price')
-                                                  ],
-                                                ),
-                                                subtitle: Row(
-                                                  children: [
-                                                    Text(
-                                                        '$_txtDescripcionPoroductos'),
-                                                    Text('$unidad')
-                                                  ],
-                                                ),
-                                                trailing: Icon(Icons
-                                                    .closed_caption_disabled)));
-                                            Get.snackbar(
-                                                '', 'Agregado al carrito',
-                                                backgroundColor: Colors.black,
-                                                colorText: Colors.white,
-                                                icon: Icon(Icons.verified_user,
-                                                    color: Colors.green));
-
-                                            print(productslist.length);
-                                          },
-                                          child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 10.0,
-                                                  right: 10.0,
-                                                  bottom: 3.0,
-                                                  top: 3.0),
-                                              child: Text(
-                                                'Agregar al carro',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 11.0),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                  color: Theme.of(context)
-                                                      .primaryColor))),
-                                      Container(
-                                        margin: EdgeInsets.only(left: 15.0),
-                                        child: Text(
-                                          '\$${price + ' ' + unidad}',
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                      )
-                                    ],
-                                  )
+                                  // Price
+                                  SizedBox(height: 8.0),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 15.0),
+                                    child: Text(
+                                      '\$${price + ' ' + unidad}',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  // Add to shoppingcart
+                                  GestureDetector(
+                                      onTap: () {
+                                        productslist.add(ListTile(
+                                            leading: Image.asset('$image'),
+                                            title: Row(
+                                              children: [
+                                                Text('$titulo'),
+                                                Text('$price')
+                                              ],
+                                            ),
+                                            subtitle: Row(
+                                              children: [
+                                                Text(
+                                                    '$_txtDescripcionPoroductos'),
+                                                Text('$unidad')
+                                              ],
+                                            ),
+                                            trailing: Icon(Icons
+                                                .closed_caption_disabled)));
+                                        Get.snackbar('', 'Agregado al carrito',
+                                            backgroundColor: Colors.black,
+                                            colorText: Colors.white,
+                                            icon: Icon(Icons.verified_user,
+                                                color: Colors.green));
+                                      },
+                                      child: Container(
+                                          padding: EdgeInsets.only(
+                                              left: 10.0,
+                                              right: 10.0,
+                                              bottom: 3.0,
+                                              top: 3.0),
+                                          child: Text(
+                                            'Agregar al carro',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 11.0),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              color: Theme.of(context)
+                                                  .primaryColor))),
                                 ],
                               ),
                             ),
@@ -784,7 +779,7 @@ class Explore extends GetWidget<ProductsList> {
                   return Stack(alignment: Alignment.center, children: [
                     Container(
                       width: 250,
-                      margin: EdgeInsets.symmetric(horizontal: 3.0),
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image(
