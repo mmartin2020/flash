@@ -28,22 +28,29 @@ class CreateAccountController extends GetxController {
           name: namecontroller.text,
           phone: telcontroller.text,
           uid: user.uid);
+formk.currentState!.reset();
+          //shoppingcart
+          firebaseFireStore
+          .collection('cartshopping')
+          .doc(user.uid)
+          .set({'A01':[0,false]}).then((value) => print('todo bien!')).catchError((e)=>print(e));
 
 //set user cloud firestore
       firebaseFireStore
           .collection('Users')
           .doc(user.uid)
-          .set(usermodel.toMap())
-          .then((value) {
-        formk.currentState?.reset();
-        Future.delayed(
+          .set(usermodel.toMap());
+
+         Future.delayed(
             Duration(seconds: 1),
             () => Get.snackbar(
                 'Confirmación', 'la cuenta ${user.email} fue creado con exito',
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.grey[800],
                 colorText: Colors.white,
                 icon: Icon(Icons.verified_user, color: Colors.green)));
-      });
+               Future.delayed(
+            Duration(seconds: 2),
+            () =>   _auth.signOut());
     } else {
       Future.delayed(
           Duration(seconds: 1),

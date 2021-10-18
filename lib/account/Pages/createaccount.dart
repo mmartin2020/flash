@@ -147,6 +147,7 @@ class CreateAccount extends GetWidget {
       BuildContext context, bool obscur, String id) {
     return Container(
       child: TextFormField(
+       
           validator: (valide) {
             if (valide!.isEmpty) return 'Requerido';
             if (createAccountController.passwdcontroller.text !=
@@ -158,7 +159,7 @@ class CreateAccount extends GetWidget {
           controller: _controller,
           textInputAction: TextInputAction.next,
           style: TextStyle(fontSize: 14.0, decoration: TextDecoration.none),
-          keyboardType: TextInputType.emailAddress,
+          keyboardType:  id=='ph'? TextInputType.phone:TextInputType.emailAddress,
           cursorColor: Colors.grey,
           obscureText: obscur,
           decoration: InputDecoration(
