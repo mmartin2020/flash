@@ -10,7 +10,6 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9000);
   final _auth = FirebaseAuth.instance;
   final User? user = _auth.currentUser;

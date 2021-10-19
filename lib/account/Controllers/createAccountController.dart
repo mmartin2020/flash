@@ -28,12 +28,35 @@ class CreateAccountController extends GetxController {
           name: namecontroller.text,
           phone: telcontroller.text,
           uid: user.uid);
-formk.currentState!.reset();
-          //shoppingcart
-          firebaseFireStore
-          .collection('cartshopping')
-          .doc(user.uid)
-          .set({'A01':[0,false]}).then((value) => print('todo bien!')).catchError((e)=>print(e));
+      formk.currentState!.reset();
+      final cartshopping =
+          firebaseFireStore.collection('cartshopping').doc(user.uid);
+      //shoppingcart
+
+      cartshopping.set({
+        "A01": [0, false],
+        "A02": [0, false],
+        "A03": [0, false],
+        "A04": [0, false],
+        "A05": [0, false],
+        "A06": [0, false],
+        "A07": [0, false],
+        "A08": [0, false],
+        "A09": [0, false],
+        "A010": [0, false],
+        "A011": [0, false],
+        "A012": [0, false],
+        "A013": [0, false],
+        "A014": [0, false],
+        "A015": [0, false],
+        "A016": [0, false],
+        "A017": [0, false],
+        "A018": [0, false],
+        "A019": [0, false],
+        "A020": [0, false],
+        "A021": [0, false],
+        "A022": [0, false],
+      });
 
 //set user cloud firestore
       firebaseFireStore
@@ -41,16 +64,14 @@ formk.currentState!.reset();
           .doc(user.uid)
           .set(usermodel.toMap());
 
-         Future.delayed(
-            Duration(seconds: 1),
-            () => Get.snackbar(
-                'Confirmación', 'la cuenta ${user.email} fue creado con exito',
-                backgroundColor: Colors.grey[800],
-                colorText: Colors.white,
-                icon: Icon(Icons.verified_user, color: Colors.green)));
-               Future.delayed(
-            Duration(seconds: 2),
-            () =>   _auth.signOut());
+      Future.delayed(
+          Duration(seconds: 1),
+          () => Get.snackbar(
+              'Confirmación', 'la cuenta ${user.email} fue creado con exito',
+              backgroundColor: Colors.grey[800],
+              colorText: Colors.white,
+              icon: Icon(Icons.verified_user, color: Colors.green)));
+      Future.delayed(Duration(seconds: 2), () => _auth.signOut());
     } else {
       Future.delayed(
           Duration(seconds: 1),

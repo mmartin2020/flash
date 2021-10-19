@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import 'package:log/HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/categoria.dart';
 import 'HomePages/Pages/condiciones.dart';
