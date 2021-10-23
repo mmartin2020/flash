@@ -117,19 +117,23 @@ class Login extends GetWidget {
                       SizedBox(
                         height: 5.0,
                       ),
-                      ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Color(0xFF3b5998)),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(20.0)))),
-                        label: Text('Loggear con Facebook'),
-                        onPressed: () {},
-                        icon: Icon(Icons.facebook_outlined),
-                      ),
+
+                      // Sign in with facebook
+                      // ElevatedButton.icon(
+                      //   style: ButtonStyle(
+                      //       backgroundColor:
+                      //           MaterialStateProperty.all(Color(0xFF3b5998)),
+                      //       shape: MaterialStateProperty.all<
+                      //               RoundedRectangleBorder>(
+                      //           RoundedRectangleBorder(
+                      //               borderRadius:
+                      //                   BorderRadius.circular(20.0)))),
+                      //   label: Text('Loggear con Facebook'),
+                      //   onPressed: () {},
+                      //   icon: Icon(Icons.facebook_outlined),
+                      // ),
+
+                      // Sign in with  google
                       ElevatedButton.icon(
                         style: ButtonStyle(
                             backgroundColor:

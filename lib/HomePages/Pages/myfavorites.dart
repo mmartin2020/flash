@@ -18,11 +18,7 @@ class Favorite extends StatelessWidget {
                 color: Colors.grey,
               ),
               Text('Upss! aun no tiene nada agregado en este espacio'),
-              OutlinedButton(
-                  onPressed: () {
-                
-                  },
-                  child: Text('up dada to firebase'))
+          
             ],
           ),
         ),

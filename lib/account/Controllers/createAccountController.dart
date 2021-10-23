@@ -22,6 +22,9 @@ class CreateAccountController extends GetxController {
     ))
         .user;
 
+
+        // _auth.
+
     if (user != null) {
       Usermodels usermodel = Usermodels(
           email: user.email,

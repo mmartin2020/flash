@@ -37,29 +37,28 @@ class LoginController extends GetxController {
 
 // Code to signin to Facebook
 
-  Future<void> signInWithFacebook() async {
-    try {
-      final AuthCredential credential = FacebookAuthProvider.credential(
-        _tokenController.text,
-      );
-      (await _auth.signInWithCredential(credential)).user;
-      Get.snackbar('', 'Signin succefully',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.black,
-          showProgressIndicator: true);
-    } catch (e) {
-      print('$e');
-      Get.snackbar('Error', '$e',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.black,
-          showProgressIndicator: true);
-    }
-  }
+  // Future<void> signInWithFacebook() async {
+  //   try {
+  //     final AuthCredential credential = FacebookAuthProvider.credential(
+  //       _tokenController.text,
+  //     );
+  //     (await _auth.signInWithCredential(credential)).user;
+  //     Get.snackbar('', 'Signin succefully',
+  //         snackPosition: SnackPosition.TOP,
+  //         backgroundColor: Colors.black,
+  //         showProgressIndicator: true);
+  //   } catch (e) {
+  //     print('$e');
+  //     Get.snackbar('Error', '$e',
+  //         snackPosition: SnackPosition.TOP,
+  //         backgroundColor: Colors.black,
+  //         showProgressIndicator: true);
+  //   }
+  // }
 
 // Code to signin with google
   Future<void> signInWithGoogle() async {
     try {
-    
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser!.authentication;
@@ -68,38 +67,57 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      
-     final UserCredential usercredential =
+      final UserCredential usercredential =
           await _auth.signInWithCredential(googleAuthCredential);
-       firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
+      firebaseFireStore.collection('Users').doc(_auth.currentUser!.uid).set({
         'name': usercredential.user?.displayName,
         'email': usercredential.user?.email,
         'phone': usercredential.user?.phoneNumber,
         'uid': usercredential.user?.uid,
       });
-firebaseFireStore
-          .collection('shoppingcart')
-          .doc(usercredential.user?.uid).snapshots().listen((event) {
-            
-            if(!event.exists)
-             firebaseFireStore
+      await firebaseFireStore
           .collection('cartshopping')
           .doc(usercredential.user?.uid)
-          .set({'A01':[0,false]}).then((value) => print('todo bien!')).catchError((e)=>print(e));
-
-;
-
+          .snapshots()
+          .listen((event) {
+        if (!event.exists)
+          firebaseFireStore
+              .collection('cartshopping')
+              .doc(usercredential.user?.uid)
+              .set({
+            'A01': [0, false],
+            'A02': [0, false],
+            'A03': [0, false],
+            'A04': [0, false],
+            'A05': [0, false],
+            'A06': [0, false],
+            'A07': [0, false],
+            'A08': [0, false],
+            'A09': [0, false],
+            'A010': [0, false],
+            'A011': [0, false],
+            'A012': [0, false],
+            'A013': [0, false],
+            'A014': [0, false],
+            'A015': [0, false],
+            'A016': [0, false],
+            'A017': [0, false],
+            'A018': [0, false],
+            'A019': [0, false],
+            'A020': [0, false],
+            'A021': [0, false],
+            'A022': [0, false],
+            'A023': [0, false],
+            'A024': [0, false],
+            'A025': [0, false],
           });
 
-firebaseFireStore
-          .collection('shoppingcart')
-          .doc(usercredential.user?.uid)
-          .set({'cant':0,'idproducts':'','isfavorite':false});
+        ;
+      });
 
       Get.offAllNamed('/home');
     } catch (e) {
-      print('$e');
-      Get.snackbar('Error para iniciar sesion con Google', '$e',
+      Get.snackbar('Falló en el inicio de sesion con Google', '$e',
           snackPosition: SnackPosition.BOTTOM);
     }
   }
