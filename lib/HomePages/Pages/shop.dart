@@ -21,20 +21,56 @@ class Shop extends StatelessWidget {
       child: DefaultTabController(
         length: 9,
         child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
+          backgroundColor: Colors.grey[100],
+          appBar: AppBar(backgroundColor: Colors.grey[100],
+        titleTextStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w800,color: Colors.grey[850], ),
+        title: Text('Tiendas'),
+
+
+      
+                 centerTitle: true,
+            automaticallyImplyLeading: false,
+            elevation: 0.0,
+            bottom: TabBar(isScrollable: true,labelColor: Theme.of(context).primaryColor,unselectedLabelColor: Colors.black87,
+        
+
               tabs: [
                 Tab(
-                  child: Text('Todos'),
+text:'Todos'                ),
+                Tab(
+                
+                  text:'Abarrotes',
+                
                 ),
-                Tab(text: 'Abarrotes'),
-                Tab(text: 'Carnicería'),
-                Tab(text: 'Panadería'),
-                Tab(text: 'Ferretería'),
-                Tab(text: 'Florería'),
-                Tab(text: 'Minimarket'),
-                Tab(text: 'Cafetería'),
-                Tab(text: 'Papelería'),
+                Tab(
+                text:'Carnicería',
+                
+                ),
+                Tab(
+                  text:'Panadería',
+                
+                ),
+                Tab(
+                text: 'Ferretería',
+                
+                ),
+                Tab(
+                  text: 'Florería'
+                
+                ),
+                Tab(
+                  text:'Minimarket',
+                
+                ),
+                Tab(
+                 text:'Cafetería',
+                
+                ),
+                Tab(
+
+                  text:'Papelería',
+
+                ),
               ],
             ),
           ),
@@ -49,6 +85,7 @@ class Shop extends StatelessWidget {
                 final j = aletorio(data.size);
 
                 return TabBarView(
+
                   children: [
                     Todos(data: data, j: j),
                     Abarrotes(data: data),
@@ -112,16 +149,18 @@ class Todos extends StatelessWidget {
             final name = data.docs[j[i]]['name'];
             final image = data.docs[j[i]]['image'];
             final hra = data.docs[j[i]]['hra'];
+            final id = data.docs[j[i]]["id"];
+            //final outstanding =data.docs[j[i]]["outstanding"];
 
             return GestureDetector(
                 onTap: () {
                   Get.toNamed('/shopview', arguments: {
-                    'name': data.docs[j[i]]["name"],
-                    'image': data.docs[j[i]]["image"],
-                    'id': data.docs[j[i]]["idShop"],
-                    'hra': data.docs[j[i]]["hra"],
-                    'categoria': data.docs[j[i]]["categoria"],
-                    'outstanding': data.docs[j[i]]["outstanding"],
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                   
+                   // 'outstanding': outstanding,
                   });
                 },
 
@@ -205,27 +244,36 @@ class Abarrotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Abarrotes'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -256,7 +304,7 @@ class Abarrotes extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -265,7 +313,7 @@ class Abarrotes extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -283,7 +331,7 @@ class Abarrotes extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -294,12 +342,13 @@ class Abarrotes extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
 }
+
+
 
 // Carniceria
 class Carniceria extends StatelessWidget {
@@ -312,27 +361,36 @@ class Carniceria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Carnicería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -363,7 +421,7 @@ class Carniceria extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -372,7 +430,7 @@ class Carniceria extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -390,7 +448,7 @@ class Carniceria extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -401,11 +459,11 @@ class Carniceria extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
+  
 }
 
 //  Panaderia
@@ -419,27 +477,36 @@ class Panaderia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Panadería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -470,7 +537,7 @@ class Panaderia extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -479,7 +546,7 @@ class Panaderia extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -497,7 +564,7 @@ class Panaderia extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -508,8 +575,7 @@ class Panaderia extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
@@ -527,27 +593,36 @@ class Ferreteria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Ferretería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -578,7 +653,7 @@ class Ferreteria extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -587,7 +662,7 @@ class Ferreteria extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -605,7 +680,7 @@ class Ferreteria extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -616,8 +691,7 @@ class Ferreteria extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
@@ -634,27 +708,36 @@ class Floreria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Florería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -685,7 +768,7 @@ class Floreria extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -694,7 +777,7 @@ class Floreria extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -712,7 +795,7 @@ class Floreria extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -723,8 +806,7 @@ class Floreria extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
@@ -741,27 +823,36 @@ class Minimarket extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Minimercado'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -792,7 +883,7 @@ class Minimarket extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -801,7 +892,7 @@ class Minimarket extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -819,7 +910,7 @@ class Minimarket extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -830,8 +921,7 @@ class Minimarket extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
@@ -848,27 +938,36 @@ class Cafeteria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Cafetería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -899,7 +998,7 @@ class Cafeteria extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -908,7 +1007,7 @@ class Cafeteria extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -926,7 +1025,7 @@ class Cafeteria extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -937,8 +1036,7 @@ class Cafeteria extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
@@ -955,27 +1053,36 @@ class Papeleria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       List<Productos> elements = [];
+    for (var i = 0; i < data.size; i++) {
+  if(data.docs[i]['categoria']=='Papelería'){
+    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
+   
+  }
+    }
+   
     return Expanded(
       child: ListView.builder(
-          itemCount: data.size,
+          itemCount:elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) {
-            final name = data.docs[i]['name'];
-            final image = data.docs[i]['image'];
-            final categoria = data.docs[i]['categoria'];
-            final hra = data.docs[i]['hra'];
-
-            if (categoria == 'Abarrotes')
+          itemBuilder: (context, i) { 
+       
+final name= elements[i].name;
+                      final image= elements[i].image;
+                      final id = elements[i].id;
+                      final hra = elements[i].hra;
+                      final categoria = elements[i].categoria;
+         
               return GestureDetector(
                   onTap: () {
-                    print('okokk');
+                
                     Get.toNamed('/shopview', arguments: {
-                      'name': data.docs[i]["name"],
-                      'image': data.docs[i]["image"],
-                      'id': data.docs[i]["idShop"],
-                      'hra': data.docs[i]["hra"],
-                      'categoria': data.docs[i]["categoria"],
-                      'outstanding': data.docs[i]["outstanding"],
+                      'name': name,
+                      'image': image,
+                      'id': id,
+                      'hra': hra,
+                      'categoria': categoria,
+                      
                     });
                   },
 
@@ -1006,7 +1113,7 @@ class Papeleria extends StatelessWidget {
                               },
                               width: 80,
                               height: 80,
-                              image: NetworkImage(image),
+                              image: NetworkImage('$image'),
                             ),
                           )),
                           SizedBox(
@@ -1015,7 +1122,7 @@ class Papeleria extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(name,
+                                Text('$name',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18.0)),
@@ -1033,7 +1140,7 @@ class Papeleria extends StatelessWidget {
                                       Icons.lock_clock_outlined,
                                       size: 10,
                                     ),
-                                    Text(hra,
+                                    Text('$hra',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 10.0)),
@@ -1044,9 +1151,20 @@ class Papeleria extends StatelessWidget {
                       ),
                     ),
                   ));
-            else
-              return Text('');
+           
           }),
     );
   }
+}
+
+
+
+class Productos {
+  Productos({@required this.id,@required this.name,@required this.image,@required this.categoria,@required this.hra,});
+
+  String? name ;
+            String?  image ;
+            String?  categoria;
+            String? hra ;
+            String? id ;
 }
