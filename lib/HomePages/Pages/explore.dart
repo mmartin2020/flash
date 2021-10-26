@@ -263,7 +263,7 @@ class Explore extends GetWidget<ProductsList> {
                                                                   onPressed:
                                                                       () {
                                                                     details.increment(
-                                                                        idProducts);
+                                                                        idProducts,image,titulo);
                                                                   },
                                                                   icon: Icon(
                                                                       Icons.add,
@@ -505,7 +505,7 @@ class Explore extends GetWidget<ProductsList> {
                                                 GestureDetector(
                                                     onTap: () {
                                                       details.increment(
-                                                          idProducts);
+                                                          idProducts,image,titulo);
                                                       Get.snackbar('Carrito ',
                                                           'Producto agregado al carrito',
                                                           backgroundColor:
@@ -747,7 +747,7 @@ class Explore extends GetWidget<ProductsList> {
                                                               IconButton(
                                                                 onPressed: () {
                                                                   details.increment(
-                                                                      idProducts);
+                                                                      idProducts,image,titulo);
                                                                 },
                                                                 icon: Icon(
                                                                     Icons.add,
@@ -915,7 +915,7 @@ class Explore extends GetWidget<ProductsList> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        details.increment(idProducts);
+                                        details.increment(idProducts,image,titulo);
                                         Get.snackbar('Carrito ',
                                             'Producto agregado al carrito',
                                             backgroundColor: Colors.grey[700],
@@ -964,22 +964,7 @@ class Explore extends GetWidget<ProductsList> {
         });
   }
 
-//fila mostrar todos
-  Widget fila(String indicador) {
-    return GestureDetector(
-        onTap: () {
-          Get.toNamed('/details/$indicador');
-        },
-        child: Row(
-          children: [
-            Text('Mostrar todos', style: TextStyle(fontSize: 12.0)),
-            Icon(
-              Icons.play_arrow_rounded,
-              size: 12.0,
-            )
-          ],
-        ));
-  }
+
 
 // variedad de productos
   Widget _listVariedades() {

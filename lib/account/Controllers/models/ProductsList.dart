@@ -12,7 +12,7 @@ class ProductsList extends GetxController {
     counter = id;
   }
 
-  void increment(String idproducts) {
+  void increment(String idproducts,image,titulo) {
     instance.collection('cartshopping').doc(user!.uid).get().then((value) {
       List lista = value.data()![idproducts].toList();
       int ls = lista[0];
