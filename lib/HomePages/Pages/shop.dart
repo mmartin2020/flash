@@ -22,54 +22,44 @@ class Shop extends StatelessWidget {
         length: 9,
         child: Scaffold(
           backgroundColor: Colors.grey[100],
-          appBar: AppBar(backgroundColor: Colors.grey[100],
-        titleTextStyle: TextStyle(fontSize: 20.0,fontWeight: FontWeight.w800,color: Colors.grey[850], ),
-        title: Text('Tiendas'),
-
-
-      
-                 centerTitle: true,
+          appBar: AppBar(
+            backgroundColor: Colors.grey[100],
+            titleTextStyle: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w800,
+              color: Colors.grey[850],
+            ),
+            title: Text('Tiendas'),
+            centerTitle: true,
             automaticallyImplyLeading: false,
             elevation: 0.0,
-            bottom: TabBar(isScrollable: true,labelColor: Theme.of(context).primaryColor,unselectedLabelColor: Colors.black87,
-        
-
+            bottom: TabBar(
+              isScrollable: true,
+              labelColor: Theme.of(context).primaryColor,
+              unselectedLabelColor: Colors.black87,
               tabs: [
+                Tab(text: 'Todos'),
                 Tab(
-text:'Todos'                ),
-                Tab(
-                
-                  text:'Abarrotes',
-                
+                  text: 'Abarrotes',
                 ),
                 Tab(
-                text:'Carnicería',
-                
+                  text: 'Carnicería',
                 ),
                 Tab(
-                  text:'Panadería',
-                
+                  text: 'Panadería',
                 ),
                 Tab(
-                text: 'Ferretería',
-                
+                  text: 'Ferretería',
+                ),
+                Tab(text: 'Florería'),
+                Tab(
+                  text: 'Minimarket',
                 ),
                 Tab(
-                  text: 'Florería'
-                
+                  text: 'Cafetería',
                 ),
                 Tab(
-                  text:'Minimarket',
-                
-                ),
-                Tab(
-                 text:'Cafetería',
-                
-                ),
-                Tab(
-
-                  text:'Papelería',
-
+                  text: 'Papelería',
                 ),
               ],
             ),
@@ -85,7 +75,6 @@ text:'Todos'                ),
                 final j = aletorio(data.size);
 
                 return TabBarView(
-
                   children: [
                     Todos(data: data, j: j),
                     Abarrotes(data: data),
@@ -159,8 +148,8 @@ class Todos extends StatelessWidget {
                     'image': image,
                     'id': id,
                     'hra': hra,
-                   
-                   // 'outstanding': outstanding,
+
+                    // 'outstanding': outstanding,
                   });
                 },
 
@@ -209,18 +198,21 @@ class Todos extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12.0)),
                               SizedBox(
-                                height: 5.0,
+                                height: 15.0,
                               ),
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.lock_clock_outlined,
-                                    size: 10,
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
                                   ),
                                   Text(hra,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10.0)),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
                                 ],
                               ),
                             ]),
@@ -246,109 +238,109 @@ class Abarrotes extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Abarrotes'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Abarrotes') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
 }
-
-
 
 // Carniceria
 class Carniceria extends StatelessWidget {
@@ -361,109 +353,110 @@ class Carniceria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Carnicería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Carnicería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
-  
 }
 
 //  Panaderia
@@ -477,105 +470,107 @@ class Panaderia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Panadería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Panadería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
@@ -593,105 +588,107 @@ class Ferreteria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Ferretería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Ferretería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
@@ -708,105 +705,107 @@ class Floreria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Florería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Florería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
@@ -823,105 +822,107 @@ class Minimarket extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Minimercado'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Minimercado') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
@@ -938,105 +939,107 @@ class Cafeteria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Cafetería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Cafetería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
@@ -1053,118 +1056,124 @@ class Papeleria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       List<Productos> elements = [];
+    List<Productos> elements = [];
     for (var i = 0; i < data.size; i++) {
-  if(data.docs[i]['categoria']=='Papelería'){
-    elements.add(Productos(id:data.docs[i]['id'],categoria: data.docs[i]['categoria'],name:data.docs[i]['name'],image:data.docs[i]['image'],hra: data.docs[i]['hra']  ));
-   
-  }
+      if (data.docs[i]['categoria'] == 'Papelería') {
+        elements.add(Productos(
+            id: data.docs[i]['id'],
+            categoria: data.docs[i]['categoria'],
+            name: data.docs[i]['name'],
+            image: data.docs[i]['image'],
+            hra: data.docs[i]['hra']));
+      }
     }
-   
+
     return Expanded(
       child: ListView.builder(
-          itemCount:elements.length,
+          itemCount: elements.length,
           padding: const EdgeInsets.all(20),
-          itemBuilder: (context, i) { 
-       
-final name= elements[i].name;
-                      final image= elements[i].image;
-                      final id = elements[i].id;
-                      final hra = elements[i].hra;
-                      final categoria = elements[i].categoria;
-         
-              return GestureDetector(
-                  onTap: () {
-                
-                    Get.toNamed('/shopview', arguments: {
-                      'name': name,
-                      'image': image,
-                      'id': id,
-                      'hra': hra,
-                      'categoria': categoria,
-                      
-                    });
-                  },
+          itemBuilder: (context, i) {
+            final name = elements[i].name;
+            final image = elements[i].image;
+            final id = elements[i].id;
+            final hra = elements[i].hra;
+            final categoria = elements[i].categoria;
 
-                  // return a stack with icon marker
+            return GestureDetector(
+                onTap: () {
+                  Get.toNamed('/shopview', arguments: {
+                    'name': name,
+                    'image': image,
+                    'id': id,
+                    'hra': hra,
+                    'categoria': categoria,
+                  });
+                },
 
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 80.0,
-                      width: 80.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          color: Colors.brown[50],
-                          border: Border.all(color: Color(0xffbcaaa4))),
-                      child: Row(
-                        children: [
-                          Card(
-                              child: Hero(
-                            tag: 'shop',
-                            child: Image(
-                              fit: BoxFit.cover,
-                              errorBuilder: (a, b, c) {
-                                return Placeholder(
-                                  strokeWidth: 1.0,
-                                  fallbackHeight: 25,
-                                  fallbackWidth: 50,
-                                );
-                              },
-                              width: 80,
-                              height: 80,
-                              image: NetworkImage('$image'),
-                            ),
-                          )),
-                          SizedBox(
-                            height: 5.0,
+                // return a stack with icon marker
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 80.0,
+                    width: 80.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.brown[50],
+                        border: Border.all(color: Color(0xffbcaaa4))),
+                    child: Row(
+                      children: [
+                        Card(
+                            child: Hero(
+                          tag: 'shop',
+                          child: Image(
+                            fit: BoxFit.cover,
+                            errorBuilder: (a, b, c) {
+                              return Placeholder(
+                                strokeWidth: 1.0,
+                                fallbackHeight: 25,
+                                fallbackWidth: 50,
+                              );
+                            },
+                            width: 80,
+                            height: 80,
+                            image: NetworkImage('$image'),
                           ),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('$name',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18.0)),
-                                Text(
-                                    'Lorem ipsum es cualquiera de estos canales',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12.0)),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.lock_clock_outlined,
-                                      size: 10,
-                                    ),
-                                    Text('$hra',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 10.0)),
-                                  ],
-                                ),
-                              ]),
-                        ],
-                      ),
+                        )),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$name',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0)),
+                              Text('Lorem ipsum es cualquiera de estos canales',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.0)),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time_outlined,
+                                    size: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 2.0,
+                                  ),
+                                  Text('$hra',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15.0)),
+                                ],
+                              ),
+                            ]),
+                      ],
                     ),
-                  ));
-           
+                  ),
+                ));
           }),
     );
   }
 }
 
-
-
 class Productos {
-  Productos({@required this.id,@required this.name,@required this.image,@required this.categoria,@required this.hra,});
+  Productos({
+    @required this.id,
+    @required this.name,
+    @required this.image,
+    @required this.categoria,
+    @required this.hra,
+  });
 
-  String? name ;
-            String?  image ;
-            String?  categoria;
-            String? hra ;
-            String? id ;
+  String? name;
+  String? image;
+  String? categoria;
+  String? hra;
+  String? id;
 }
