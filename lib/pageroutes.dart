@@ -8,6 +8,7 @@ import 'HomePages/Pages/masVendido.dart';
 import 'HomePages/Pages/mispedidos.dart';
 import 'HomePages/Pages/myfavorites.dart';
 import 'HomePages/Pages/offer.dart';
+import 'HomePages/Pages/pay.dart';
 import 'HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/search.dart';
 import 'HomePages/Pages/shopping_cart.dart';
@@ -21,6 +22,11 @@ List<GetPage<dynamic>> routes = [
     name: '/initialpage',
     page: () => InitPage(),
     title: 'Initialpage',
+  ),
+  GetPage(
+    name: '/pay',
+    page: () => Pay(),
+    title: 'pay',
   ),
   GetPage(
     name: '/login',
