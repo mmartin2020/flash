@@ -12,13 +12,13 @@ class ProductsList extends GetxController {
     counter = id;
   }
 
-  void increment(String idproducts,image,titulo) {
+  void increment(String idproducts, image, titulo,price) {
     instance.collection('cartshopping').doc(user!.uid).get().then((value) {
       List lista = value.data()![idproducts].toList();
       int ls = lista[0];
       ls++;
       instance.collection('cartshopping').doc(user!.uid).update({
-        idproducts: [ls, lista[1],titulo,image]
+        idproducts: [ls, lista[1], titulo,price, image]
       });
 
       counter++;
@@ -27,7 +27,7 @@ class ProductsList extends GetxController {
     });
   }
 
-  void discrement(String idproducts) {
+  void discrement(String idproducts, image, titulo,price) {
     instance.collection('cartshopping').doc(user!.uid).get().then((value) {
       List lista = value.data()![idproducts].toList();
       int ls = lista[0];
@@ -35,7 +35,7 @@ class ProductsList extends GetxController {
       if (ls > 0) {
         ls--;
         instance.collection('cartshopping').doc(user!.uid).update({
-          idproducts: [ls, lista[1]]
+          idproducts: [ls, lista[1], titulo,price, image]
         });
 
         counter--;
@@ -45,14 +45,14 @@ class ProductsList extends GetxController {
     });
   }
 
-  void favorite(String idproducts) {
+  void favorite(String idproducts,titulo, image,price) {
     instance.collection('cartshopping').doc(user!.uid).get().then((value) {
       List lista = value.data()![idproducts].toList();
       int ls = lista[0];
       bool favorite = lista[1];
 
       instance.collection('cartshopping').doc(user!.uid).update({
-        idproducts: [ls, !favorite]
+        idproducts: [ls, !favorite,titulo,price, image]
       });
     });
   }

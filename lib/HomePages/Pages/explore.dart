@@ -240,7 +240,10 @@ class Explore extends GetWidget<ProductsList> {
                                                                   onPressed:
                                                                       () {
                                                                     details.discrement(
-                                                                        idProducts,image,titulo);
+                                                                        idProducts,
+                                                                        image,
+                                                                        titulo,
+                                                                        price);
                                                                   },
                                                                   icon: Icon(
                                                                     Icons
@@ -263,7 +266,10 @@ class Explore extends GetWidget<ProductsList> {
                                                                   onPressed:
                                                                       () {
                                                                     details.increment(
-                                                                        idProducts,image,titulo);
+                                                                        idProducts,
+                                                                        image,
+                                                                        titulo,
+                                                                        price);
                                                                   },
                                                                   icon: Icon(
                                                                       Icons.add,
@@ -386,8 +392,10 @@ class Explore extends GetWidget<ProductsList> {
                                                           ),
                                                     onPressed: () {
                                                       details.favorite(
-                                                        idProducts,
-                                                      );
+                                                          idProducts,
+                                                          titulo,
+                                                          image,
+                                                          price);
                                                     },
                                                   ),
                                                 ))
@@ -505,7 +513,10 @@ class Explore extends GetWidget<ProductsList> {
                                                 GestureDetector(
                                                     onTap: () {
                                                       details.increment(
-                                                          idProducts,image,titulo);
+                                                          idProducts,
+                                                          image,
+                                                          titulo,
+                                                          price);
                                                       Get.snackbar('Carrito ',
                                                           'Producto agregado al carrito',
                                                           backgroundColor:
@@ -626,333 +637,319 @@ class Explore extends GetWidget<ProductsList> {
 
                   return Container(
                       child: ListTile(
-                          onTap: () {
-                            Get.bottomSheet(
-                              StreamBuilder(
-                                  stream: fbsCartShopping.snapshots(),
-                                  builder: (context, AsyncSnapshot snp) {
-                                    if (snp.hasData) {
-                                      final result = snp.requireData;
-                                      int count = result[idProducts][0];
-                                      details.InitialState(count.obs);
+                    onTap: () {
+                      Get.bottomSheet(
+                        StreamBuilder(
+                            stream: fbsCartShopping.snapshots(),
+                            builder: (context, AsyncSnapshot snp) {
+                              if (snp.hasData) {
+                                final result = snp.requireData;
+                                int count = result[idProducts][0];
+                                details.InitialState(count.obs);
 
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadiusDirectional
-                                                        .only(
-                                                            topStart:
-                                                                Radius.circular(
-                                                                    20),
-                                                            topEnd:
-                                                                Radius.circular(
-                                                                    20))),
-                                            height: 400.0,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    child: Image(
-                                                      width: 200,
-                                                      height: 200,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      image:
-                                                          AssetImage('$image'),
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: 100.0,
-                                                        height: 120.0,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Column(
-                                                            children: [
-                                                              Text(
-                                                                '$titulo',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                              Text(
-                                                                  '$subtitulo'),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '\$$price',
-                                                        style: TextStyle(
-                                                            fontSize: 20.0,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Icon(Icons.star,
-                                                                  size: 16.0,
-                                                                  color: Colors
-                                                                      .yellow),
-                                                              Text(
-                                                                '$calif Calificaciones',
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed: () {
-                                                                  details.discrement(
-                                                                      idProducts,image,titulo);
-                                                                },
-                                                                icon: Icon(
-                                                                  Icons.remove,
-                                                                  size: 19.0,
-                                                                ),
-                                                              ),
-                                                              GetX<ProductsList>(
-                                                                  builder:
-                                                                      (context) {
-                                                                return Text(
-                                                                    '${details.counter}',
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            19.0,
-                                                                        fontWeight:
-                                                                            FontWeight.bold));
-                                                              }),
-                                                              IconButton(
-                                                                onPressed: () {
-                                                                  details.increment(
-                                                                      idProducts,image,titulo);
-                                                                },
-                                                                icon: Icon(
-                                                                    Icons.add,
-                                                                    size: 19.0),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      Home(2)));
-                                                    },
-                                                    child: Container(
-                                                      width: 300.0,
-                                                      height: 55.0,
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .primaryColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0)),
-                                                      child: Center(
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .shopping_bag,
-                                                                  size: 30,
-                                                                  color: Colors
-                                                                      .white38,
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      vertical:
-                                                                          10.0),
-                                                                  child:
-                                                                      VerticalDivider(
-                                                                    color: Colors
-                                                                        .white38,
-                                                                    width: 10.0,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  'Agregar y ir al carrito',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          16.0,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
-                                                                ),
-                                                                Icon(
-                                                                    Icons
-                                                                        .arrow_forward_ios_sharp,
-                                                                    size: 12.0,
-                                                                    color: Colors
-                                                                        .white54)
-                                                              ],
-                                                            ),
-                                                            GetX<ProductsList>(
-                                                                builder:
-                                                                    (context) {
-                                                              return Text(
-                                                                'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        12.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              );
-                                                            })
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            top: 1.0,
-                                            right: 1.0,
-                                            child: Container(
-                                              child: GetBuilder<ProductsList>(
-                                                  builder: (con) {
-                                                return IconButton(
-                                                    onPressed: () {
-                                                      con.favorito.toggle();
-                                                    },
-                                                    icon: con.favorito == true
-                                                        ? Icon(Icons
-                                                            .favorite_border)
-                                                        : Icon(Icons
-                                                            .favorite_border));
-                                              }),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    } else
-                                      return CircularProgressIndicator();
-                                  }),
-                            );
-                          },
-                          contentPadding: EdgeInsets.all(15),
-                          isThreeLine: true,
-                          title: Text(titulo),
-                          subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(subtitulo),
-                                Row(
-                                  children: [
-                                    Icon(Icons.star,
-                                        color: Colors.yellow, size: 15.0),
-                                    Text(calif,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500)),
-                                    Text(' ($califtotal Clasificación)',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w500)),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                return Stack(
                                   children: [
                                     Container(
-                                      child: Text(
-                                        '\$${price + ' ' + medida}',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadiusDirectional.only(
+                                                  topStart: Radius.circular(20),
+                                                  topEnd: Radius.circular(20))),
+                                      height: 400.0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              child: Image(
+                                                width: 200,
+                                                height: 200,
+                                                alignment: Alignment.center,
+                                                image: AssetImage('$image'),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  width: 100.0,
+                                                  height: 120.0,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          '$titulo',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        Text('$subtitulo'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '\$$price',
+                                                  style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.star,
+                                                            size: 16.0,
+                                                            color:
+                                                                Colors.yellow),
+                                                        Text(
+                                                          '$calif Calificaciones',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            details.discrement(
+                                                                idProducts,
+                                                                image,
+                                                                titulo,
+                                                                price);
+                                                          },
+                                                          icon: Icon(
+                                                            Icons.remove,
+                                                            size: 19.0,
+                                                          ),
+                                                        ),
+                                                        GetX<ProductsList>(
+                                                            builder: (context) {
+                                                          return Text(
+                                                              '${details.counter}',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      19.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold));
+                                                        }),
+                                                        IconButton(
+                                                          onPressed: () {
+                                                            details.increment(
+                                                                idProducts,
+                                                                image,
+                                                                titulo,
+                                                                price);
+                                                          },
+                                                          icon: Icon(Icons.add,
+                                                              size: 19.0),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Home(2)));
+                                              },
+                                              child: Container(
+                                                width: 300.0,
+                                                height: 55.0,
+                                                decoration: BoxDecoration(
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0)),
+                                                child: Center(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.shopping_bag,
+                                                            size: 30,
+                                                            color:
+                                                                Colors.white38,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    vertical:
+                                                                        10.0),
+                                                            child:
+                                                                VerticalDivider(
+                                                              color: Colors
+                                                                  .white38,
+                                                              width: 10.0,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Agregar y ir al carrito',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Icon(
+                                                              Icons
+                                                                  .arrow_forward_ios_sharp,
+                                                              size: 12.0,
+                                                              color: Colors
+                                                                  .white54)
+                                                        ],
+                                                      ),
+                                                      GetX<ProductsList>(
+                                                          builder: (context) {
+                                                        return Text(
+                                                          'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        );
+                                                      })
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        details.increment(idProducts,image,titulo);
-                                        Get.snackbar('Carrito ',
-                                            'Producto agregado al carrito',
-                                            backgroundColor: Colors.grey[700],
-                                            colorText: Colors.white,
-                                            icon: Icon(Icons.verified_user,
-                                                color: Colors.green));
-                                      },
+                                    Positioned(
+                                      top: 1.0,
+                                      right: 1.0,
                                       child: Container(
-                                          margin: EdgeInsets.only(left: 12.0),
-                                          padding: EdgeInsets.only(
-                                              left: 10.0,
-                                              right: 10.0,
-                                              bottom: 3.0,
-                                              top: 3.0),
-                                          child: Text(
-                                            'Agregar al carro',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 11.0),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                              color: Theme.of(context)
-                                                  .primaryColor)),
+                                        child: GetBuilder<ProductsList>(
+                                            builder: (con) {
+                                          return IconButton(
+                                              onPressed: () {
+                                                con.favorito.toggle();
+                                              },
+                                              icon: con.favorito == true
+                                                  ? Icon(Icons.favorite_border)
+                                                  : Icon(
+                                                      Icons.favorite_border));
+                                        }),
+                                      ),
                                     ),
                                   ],
+                                );
+                              } else
+                                return CircularProgressIndicator();
+                            }),
+                      );
+                    },
+                    contentPadding: EdgeInsets.all(15),
+                    isThreeLine: true,
+                    title: Text(titulo),
+                    subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(subtitulo),
+                          Row(
+                            children: [
+                              Icon(Icons.star,
+                                  color: Colors.yellow, size: 15.0),
+                              Text(calif,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500)),
+                              Text(' ($califtotal Clasificación)',
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w500)),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Text(
+                                  '\$${price + ' ' + medida}',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
-                              ]),
-                          leading:  Card(
-                                elevation: 0.0,
-                                child: Image.asset(
-                                  image,
-                                  width: 70,
-                                  height: 80,
-                                )),
-                          ));
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  details.increment(
+                                      idProducts, image, titulo, price);
+                                  Get.snackbar('Carrito ',
+                                      'Producto agregado al carrito',
+                                      backgroundColor: Colors.grey[700],
+                                      colorText: Colors.white,
+                                      icon: Icon(Icons.verified_user,
+                                          color: Colors.green));
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.only(left: 12.0),
+                                    padding: EdgeInsets.only(
+                                        left: 10.0,
+                                        right: 10.0,
+                                        bottom: 3.0,
+                                        top: 3.0),
+                                    child: Text(
+                                      'Agregar al carro',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 11.0),
+                                    ),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: Theme.of(context).primaryColor)),
+                              ),
+                            ],
+                          ),
+                        ]),
+                    leading: Card(
+                        elevation: 0.0,
+                        child: Image.asset(
+                          image,
+                          width: 70,
+                          height: 80,
+                        )),
+                  ));
                 },
               ),
             );
@@ -963,8 +960,6 @@ class Explore extends GetWidget<ProductsList> {
           }
         });
   }
-
-
 
 // variedad de productos
   Widget _listVariedades() {
