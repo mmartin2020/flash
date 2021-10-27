@@ -18,7 +18,7 @@ class ProductsList extends GetxController {
       int ls = lista[0];
       ls++;
       instance.collection('cartshopping').doc(user!.uid).update({
-        idproducts: [ls, lista[1]]
+        idproducts: [ls, lista[1],titulo,image]
       });
 
       counter++;

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:log/account/Controllers/models/ProductsList.dart';
 
@@ -108,7 +107,8 @@ class ShoppingCart extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             if (snapshot.hasData) {
-              final list = snapshot.data!.metadata;
+              final list = snapshot.data;
+              print(list!["A03"][0]);
             }
             return Padding(
               padding: const EdgeInsets.all(8.0),
