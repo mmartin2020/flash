@@ -240,7 +240,7 @@ class Explore extends GetWidget<ProductsList> {
                                                                   onPressed:
                                                                       () {
                                                                     details.discrement(
-                                                                        idProducts);
+                                                                        idProducts,image,titulo);
                                                                   },
                                                                   icon: Icon(
                                                                     Icons
@@ -726,7 +726,7 @@ class Explore extends GetWidget<ProductsList> {
                                                               IconButton(
                                                                 onPressed: () {
                                                                   details.discrement(
-                                                                      idProducts);
+                                                                      idProducts,image,titulo);
                                                                 },
                                                                 icon: Icon(
                                                                   Icons.remove,

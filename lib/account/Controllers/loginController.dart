@@ -19,6 +19,7 @@ class LoginController extends GetxController {
         email: _emailcontroller.text,
         password: _passwdcontroller.text,
       ));
+      _formkey.currentState!.reset();
       Get.defaultDialog(
           radius: 0.0,
           content: RefreshProgressIndicator(),

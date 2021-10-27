@@ -142,7 +142,11 @@ class CreateAccount extends GetWidget {
       ),
     );
   }
-
+ bool passdvalidate(String value){
+        String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+        RegExp regExp = new RegExp(pattern);
+        return regExp.hasMatch(value);
+  }
   Widget _inputT(TextEditingController _controller, Icon icon, String text,
       BuildContext context, bool obscur, String id) {
     return Container(
@@ -153,6 +157,9 @@ class CreateAccount extends GetWidget {
             if (createAccountController.passwdcontroller.text !=
                     createAccountController.passwordverify.text &&
                 id == 'pv') return 'Las contraseña no coinciden';
+            if(id=='pa' && !passdvalidate(valide))
+              return "El formato de la contraseña es incorrecto *Ej: Gft567y%g";
+            
 
             return null;
           },

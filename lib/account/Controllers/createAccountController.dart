@@ -31,35 +31,37 @@ class CreateAccountController extends GetxController {
           name: namecontroller.text,
           phone: telcontroller.text,
           uid: user.uid);
-      formk.currentState!.reset();
+     
       final cartshopping =
           firebaseFireStore.collection('cartshopping').doc(user.uid);
       //shoppingcart
 
       cartshopping.set({
-        "A01": [0, false],
-        "A02": [0, false],
-        "A03": [0, false],
-        "A04": [0, false],
-        "A05": [0, false],
-        "A06": [0, false],
-        "A07": [0, false],
-        "A08": [0, false],
-        "A09": [0, false],
-        "A010": [0, false],
-        "A011": [0, false],
-        "A012": [0, false],
-        "A013": [0, false],
-        "A014": [0, false],
-        "A015": [0, false],
-        "A016": [0, false],
-        "A017": [0, false],
-        "A018": [0, false],
-        "A019": [0, false],
-        "A020": [0, false],
-        "A021": [0, false],
-        "A022": [0, false],
+        "A01": [0, false,'name','precio','image'],
+        "A02": [0, false,'name','precio','image'],
+        "A03": [0, false,'name','precio','image'],
+        "A04": [0, false,'name','precio','image'],
+        "A05": [0, false,'name','precio','image'],
+        "A06": [0, false,'name','precio','image'],
+        "A07": [0, false,'name','precio','image'],
+        "A08": [0, false,'name','precio','image'],
+        "A09": [0, false,'name','precio','image'],
+        "A010": [0, false,'name','precio','image'],
+        "A011": [0, false,'name','precio','image'],
+        "A012": [0, false,'name','precio','image'],
+        "A013": [0, false,'name','precio','image'],
+        "A014": [0, false,'name','precio','image'],
+        "A015": [0, false,'name','precio','image'],
+        "A016": [0, false,'name','precio','image'],
+        "A017": [0, false,'name','precio','image'],
+        "A018": [0, false,'name','precio','image'],
+        "A019": [0, false,'name','precio','image'],
+        "A020": [0, false,'name','precio','image'],
+        "A021": [0, false,'name','precio','image'],
+        "A022": [0, false,'name','precio','image'],
+      
       });
+      formk.currentState!.reset();
 
 //set user cloud firestore
       firebaseFireStore
