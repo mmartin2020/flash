@@ -284,13 +284,29 @@ class Explore extends GetWidget<ProductsList> {
                                                     ),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Home(
-                                                                            2)));
+                                                        if (details.counter >
+                                                            0) {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Home(
+                                                                              2)));
+                                                        } else {
+                                                          details.increment(
+                                                              idProducts,
+                                                              image,
+                                                              titulo,
+                                                              price);
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Home(
+                                                                              2)));
+                                                        }
                                                       },
                                                       child: Container(
                                                         width: 300.0,
@@ -332,7 +348,10 @@ class Explore extends GetWidget<ProductsList> {
                                                                     ),
                                                                   ),
                                                                   Text(
-                                                                    'Agregar y ir al carrito',
+                                                                    details.counter >
+                                                                            0
+                                                                        ? 'Ir al carrito'
+                                                                        : 'Agregar y ir al carrito',
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .white,
@@ -767,11 +786,21 @@ class Explore extends GetWidget<ProductsList> {
                                             ),
                                             GestureDetector(
                                               onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Home(2)));
+                                                if (details.counter > 0) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Home(2)));
+                                                } else {
+                                                  details.increment(idProducts,
+                                                      image, titulo, price);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Home(2)));
+                                                }
                                               },
                                               child: Container(
                                                 width: 300.0,
@@ -810,7 +839,9 @@ class Explore extends GetWidget<ProductsList> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            'Agregar y ir al carrito',
+                                                            details.counter > 0
+                                                                ? 'Ir al carrito'
+                                                                : 'Agregar y ir al carrito',
                                                             style: TextStyle(
                                                                 color: Colors
                                                                     .white,

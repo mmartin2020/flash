@@ -11,8 +11,8 @@ class ShoppingCart extends StatelessWidget {
       .collection('cartshopping')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots();
- 
-  List<String> code = [
+
+  final List<String> code = [
     "A01",
     "A02",
     "A03",
@@ -35,96 +35,116 @@ class ShoppingCart extends StatelessWidget {
     "A021",
     "A022"
   ];
-  List<Map<String, dynamic>> supercero = [];
+  final List<Map<String, dynamic>> supercero = [];
 
   @override
   Widget build(BuildContext context) {
+    var total = 0;
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => Get.toNamed('/pay'),
-          label: Text('Ir a pagar - Total: \$78.999}',
+          label: Text('Ir a pagar ',
               style: TextStyle(fontWeight: FontWeight.bold)),
           icon: Icon(Icons.payment_outlined),
         ),
-        body: StreamBuilder(
-          stream: stream,
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError)
-              Center(
-                child: CircularProgressIndicator(),
-              );
-            if (snapshot.hasData) {
-              final service = snapshot.data;
-         
-              code.forEach((element) {
-                if (service![element][0] > 0) {
-                  supercero.add({
-                    'count': service[element][0],
-                    'name': service[element][2],
-                    'price': service[element][3],
-                    'image': service[element][4],
-                    'id': element,
-                  });
-                }
-              });
+        body: Container(
+          child: StreamBuilder(
+            stream: stream,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              bool state = true;
+              if (snapshot.hasError)
+                Center(
+                  child: CircularProgressIndicator(),
+                );
+              if (snapshot.connectionState == ConnectionState.waiting)
+                Center(
+                  child: CircularProgressIndicator(),
+                );
 
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.active) {
+                final service = snapshot.data;
+                code.forEach((element) {
+                  if (service[element][0] > 0) {
+                    supercero.add({
+                      'count': service[element][0],
+                      'name': service[element][2],
+                      'price': service[element][3],
+                      'image': service[element][4],
+                      'id': element,
+                    });
+                    state = false;
+                  }
+                });
 
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                            child: Text(
-                          'Carrito de compra',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 18.0),
-                        )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    Flexible(
-                      child: ListView.builder(
-                        itemCount: supercero.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return component(
-                              supercero[index]["name"],
-                              supercero[index]["price"],
-                              supercero[index]["image"],
-                              supercero[index]["count"]);
-
-                         
-                        },
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 40.0,
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                              child: Text(
+                            'Carrito de compra',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800, fontSize: 18.0),
+                          )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40.0,
+                      ),
+                      state
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.info,
+                                      size: 40, color: Colors.grey),
+                                  Text(
+                                      'No se ha encontrado información para mostrar',
+                                      style: TextStyle(
+                                          fontSize: 15.0, color: Colors.grey))
+                                ],
+                              ),
+                            )
+                          : Flexible(
+                              child: ListView.builder(
+                                itemCount: supercero.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  total = (supercero[index]["count"] *
+                                          supercero[index]["price"]) +
+                                      total;
+                                  return component(
+                                      supercero[index]["id"],
+                                      supercero[index]["name"],
+                                      supercero[index]["price"],
+                                      supercero[index]["image"],
+                                      supercero[index]["count"]);
+                                },
+                              ),
+                            ),
+                    ],
+                  ),
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
         ),
       ),
     );
   }
 
-  double sumtotal(total) {
-    return total;
-  }
-
-  Widget component(String title, String price, String image, int count) {
+  Widget component(
+      String id, String title, String price, String image, int count) {
     return Center(
       child: Container(
         width: 340.0,
@@ -148,47 +168,51 @@ class ShoppingCart extends StatelessWidget {
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
-                    height: 5.0,
+                    height: 10.0,
                   ),
                   Row(
                     children: [
                       Text(
-                        '$count X \$ $price ',
+                        '$count X    \$ $price ',
                         style: TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.w500),
+                            fontSize: 16.0, fontWeight: FontWeight.w500),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              //details.discrement(
-                              // 'idProducts');
-                            },
-                            icon: Icon(
-                              Icons.remove,
-                              size: 19.0,
-                            ),
-                          ),
-                          //{details.counter}
-                          Text('0',
-                              style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
-                          IconButton(
-                            onPressed: () {
-                              //details.increment(
-                              // 'idProducts');
-                            },
-                            icon: Icon(Icons.add, size: 19.0),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     IconButton(
+                      //       onPressed: () {
+                      //         details.discrement(id, image, title, price);
+                      //       },
+                      //       icon: Icon(
+                      //         Icons.remove,
+                      //         size: 19.0,
+                      //       ),
+                      //     ),
+                      //     Text('$count',
+                      //         style: TextStyle(
+                      //             fontSize: 16.0, fontWeight: FontWeight.bold)),
+                      //     IconButton(
+                      //       onPressed: () {
+                      //         details.increment(id, image, title, price);
+                      //       },
+                      //       icon: Icon(Icons.add, size: 19.0),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ],
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('cartshopping')
+                        .doc('OIUlHx3qVZZa2TIcCJAbs3NFiRg1')
+                        .update({
+                      id: [0, false, title, price, image]
+                    });
+                  },
                   icon: Icon(
                     Icons.close_outlined,
                     size: 16.0,
