@@ -34,7 +34,8 @@ class Explore extends GetWidget<ProductsList> {
           ),
           ListTile(
             onTap: () {
-              Get.bottomSheet(Container());
+              // Get.bottomSheet(Container());
+              Get.toNamed('/pruebamap');
             },
             dense: true,
             leading: Icon(Icons.add_location_alt),
