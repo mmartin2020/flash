@@ -35,7 +35,7 @@ class Explore extends GetWidget<ProductsList> {
           ListTile(
             onTap: () {
               // Get.bottomSheet(Container());
-              Get.toNamed('/pruebamap');
+              Get.toNamed('/position');
             },
             dense: true,
             leading: Icon(Icons.add_location_alt),
@@ -348,19 +348,23 @@ class Explore extends GetWidget<ProductsList> {
                                                                           10.0,
                                                                     ),
                                                                   ),
-                                                                  Text(
-                                                                    details.counter >
-                                                                            0
-                                                                        ? 'Ir al carrito'
-                                                                        : 'Agregar y ir al carrito',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            16.0,
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
-                                                                  ),
+                                                                  GetX<ProductsList>(
+                                                                      builder:
+                                                                          (context) {
+                                                                    return Text(
+                                                                      details.counter >
+                                                                              0
+                                                                          ? 'Ir al carrito'
+                                                                          : 'Agregar y ir al carrito',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              16.0,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    );
+                                                                  }),
                                                                   Icon(
                                                                       Icons
                                                                           .arrow_forward_ios_sharp,

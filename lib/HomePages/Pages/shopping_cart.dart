@@ -42,12 +42,6 @@ class ShoppingCart extends StatelessWidget {
     var total = 0;
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => Get.toNamed('/pay'),
-          label: Text('Ir a pagar ',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          icon: Icon(Icons.payment_outlined),
-        ),
         body: Container(
           child: StreamBuilder(
             stream: stream,
@@ -101,33 +95,63 @@ class ShoppingCart extends StatelessWidget {
                         height: 40.0,
                       ),
                       state
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.info,
-                                      size: 40, color: Colors.grey),
-                                  Text(
-                                      'No se ha encontrado información para mostrar',
-                                      style: TextStyle(
-                                          fontSize: 15.0, color: Colors.grey))
-                                ],
-                              ),
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(Icons.info, size: 100, color: Colors.grey),
+                                Text(
+                                    'No se ha encontrado información para mostrar',
+                                    style: TextStyle(
+                                        fontSize: 15.0, color: Colors.grey))
+                              ],
                             )
-                          : Flexible(
-                              child: ListView.builder(
-                                itemCount: supercero.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  total = (supercero[index]["count"] *
-                                          supercero[index]["price"]) +
-                                      total;
-                                  return component(
-                                      supercero[index]["id"],
-                                      supercero[index]["name"],
-                                      supercero[index]["price"],
-                                      supercero[index]["image"],
-                                      supercero[index]["count"]);
-                                },
+                          : Expanded(
+                              child: Stack(
+                                children: [
+                                  ListView.builder(
+                                    itemCount: supercero.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      total = (supercero[index]["count"] * 1) +
+                                          total;
+
+                                      // int.parse(supercero[index]["price"])
+                                      return component(
+                                          supercero[index]["id"],
+                                          supercero[index]["name"],
+                                          supercero[index]["price"],
+                                          supercero[index]["image"],
+                                          supercero[index]["count"]);
+                                    },
+                                  ),
+
+                                  // floating button
+                                  Positioned(
+                                    bottom: 0.0,
+                                    right: 0.0,
+                                    child: Container(
+                                      child: FloatingActionButton.extended(
+                                        onPressed: () => Get.toNamed('/pay'),
+                                        label: Row(
+                                          children: [
+                                            Text('Ir a pagar ',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Icon(Icons.arrow_forward_ios_sharp,
+                                                size: 12.0,
+                                                color: Colors.white54),
+                                            Text('Total:  $total',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                        icon: Icon(Icons.payment_outlined),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                     ],
@@ -145,79 +169,131 @@ class ShoppingCart extends StatelessWidget {
 
   Widget component(
       String id, String title, String price, String image, int count) {
-    return Center(
-      child: Container(
-        width: 340.0,
-        height: 100.0,
-        child: Card(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+    return GestureDetector(
+      onTap: () {
+        Get.defaultDialog(
+          title: '',
+          content: Container(
+            width: 300,
+            height: 200,
+            child: Column(children: [
+              Spacer(),
               Image(
                 image: AssetImage(image),
-                errorBuilder: (_, e, s) => Icon(Icons.image),
-                width: 50.0,
-                height: 50.0,
+                width: 50,
+                height: 50,
               ),
-              Column(
+              Spacer(),
+              Text(
+                title,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Spacer(),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                  IconButton(
+                    onPressed: () {
+                      details.discrement(id, image, title, price);
+                    },
+                    icon: Icon(
+                      Icons.remove,
+                      size: 19.0,
+                    ),
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '$count X    \$ $price ',
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.w500),
-                      ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     IconButton(
-                      //       onPressed: () {
-                      //         details.discrement(id, image, title, price);
-                      //       },
-                      //       icon: Icon(
-                      //         Icons.remove,
-                      //         size: 19.0,
-                      //       ),
-                      //     ),
-                      //     Text('$count',
-                      //         style: TextStyle(
-                      //             fontSize: 16.0, fontWeight: FontWeight.bold)),
-                      //     IconButton(
-                      //       onPressed: () {
-                      //         details.increment(id, image, title, price);
-                      //       },
-                      //       icon: Icon(Icons.add, size: 19.0),
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
+                  Spacer(),
+                  Text('$count',
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      details.increment(id, image, title, price);
+                    },
+                    icon: Icon(Icons.add, size: 19.0),
                   ),
                 ],
               ),
-              IconButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('cartshopping')
-                        .doc('OIUlHx3qVZZa2TIcCJAbs3NFiRg1')
-                        .update({
-                      id: [0, false, title, price, image]
-                    });
-                  },
-                  icon: Icon(
-                    Icons.close_outlined,
-                    size: 16.0,
-                  ))
-            ],
+              Spacer(),
+            ]),
+            decoration: BoxDecoration(color: Colors.white),
+          ),
+        );
+      },
+      child: Center(
+        child: Container(
+          width: 340.0,
+          height: 100.0,
+          child: Card(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Image(
+                  image: AssetImage(image),
+                  errorBuilder: (_, e, s) => Icon(Icons.image),
+                  width: 50.0,
+                  height: 50.0,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          '$count X    \$ $price ',
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.w500),
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     IconButton(
+                        //       onPressed: () {
+                        //         details.discrement(id, image, title, price);
+                        //       },
+                        //       icon: Icon(
+                        //         Icons.remove,
+                        //         size: 19.0,
+                        //       ),
+                        //     ),
+                        //     Text('$count',
+                        //         style: TextStyle(
+                        //             fontSize: 16.0, fontWeight: FontWeight.bold)),
+                        //     IconButton(
+                        //       onPressed: () {
+                        //         details.increment(id, image, title, price);
+                        //       },
+                        //       icon: Icon(Icons.add, size: 19.0),
+                        //     ),
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  ],
+                ),
+                IconButton(
+                    onPressed: () {
+                      FirebaseFirestore.instance
+                          .collection('cartshopping')
+                          .doc('OIUlHx3qVZZa2TIcCJAbs3NFiRg1')
+                          .update({
+                        id: [0, false, title, price, image]
+                      });
+                    },
+                    icon: Icon(
+                      Icons.close_outlined,
+                      size: 16.0,
+                    ))
+              ],
+            ),
           ),
         ),
       ),

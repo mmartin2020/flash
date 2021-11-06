@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:log/HomePages/Pages/maplocation.dart';
 
 import 'package:log/HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/categoria.dart';
@@ -9,7 +10,6 @@ import 'HomePages/Pages/mispedidos.dart';
 import 'HomePages/Pages/myfavorites.dart';
 import 'HomePages/Pages/offer.dart';
 import 'HomePages/Pages/pay.dart';
-import 'HomePages/Pages/pruebamap.dart';
 import 'HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/search.dart';
 import 'HomePages/Pages/shopping_cart.dart';
@@ -95,8 +95,8 @@ List<GetPage<dynamic>> routes = [
     title: 'ShoppingCart',
   ),
   GetPage(
-    name: '/pruebamap',
-    page: () => Pruebamap(),
-    title: 'pruebamap',
+    name: '/position',
+    page: () => Position(),
+    title: 'Position',
   ),
 ];
