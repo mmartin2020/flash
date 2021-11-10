@@ -25,6 +25,7 @@ main() async {
     ),
     debugShowCheckedModeBanner: false,
     initialRoute: user == null ? '/initialpage' : '/home',
+   
     getPages: routes,
   ));
 }

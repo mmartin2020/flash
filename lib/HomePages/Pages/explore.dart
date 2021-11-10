@@ -113,7 +113,7 @@ class Explore extends GetWidget<ProductsList> {
                       String _txtDescripcionPoroductos =
                           elements[index]["subtitulo"];
                       String price =
-                          numberFormat(elements[rando[index]]["precio"]);
+                          elements[rando[index]]["precio"];
                       String unidad = elements[rando[index]]["medida"];
                       String image = elements[rando[index]]["image"];
                       String titulo = elements[rando[index]]["titulo"];
@@ -208,7 +208,7 @@ class Explore extends GetWidget<ProductsList> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          '\$$price',
+                                                          '\$${details.numberFormat(price)}',
                                                           style: TextStyle(
                                                               fontSize: 20.0,
                                                               fontWeight:
@@ -378,7 +378,7 @@ class Explore extends GetWidget<ProductsList> {
                                                                   builder:
                                                                       (context) {
                                                                 return Text(
-                                                                  'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
+                                                                  'Total: ${details.numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
                                                                   style: TextStyle(
                                                                       color: Colors
                                                                           .white,
@@ -524,7 +524,7 @@ class Explore extends GetWidget<ProductsList> {
                                                   margin: EdgeInsets.only(
                                                       left: 15.0),
                                                   child: Text(
-                                                    '\$${price + ' ' + unidad}',
+                                                    '\$${details.numberFormat(price)  + ' ' + unidad}',
                                                     style: TextStyle(
                                                         fontSize: 16.0,
                                                         fontWeight:
@@ -650,7 +650,7 @@ class Explore extends GetWidget<ProductsList> {
                   String titulo = elements[rando[index]]["titulo"];
                   String subtitulo = elements[rando[index]]["subtitulo"];
                   String calif = elements[rando[index]]["calificacion"];
-                  String price = numberFormat(elements[rando[index]]["precio"]);
+                  String price = elements[rando[index]]["precio"];
                   String califtotal =
                       elements[rando[index]]["clasificacion_total"];
                   String medida = elements[rando[index]]["medida"];
@@ -720,7 +720,7 @@ class Explore extends GetWidget<ProductsList> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  '\$$price',
+                                                  '\$${details.numberFormat(price) }',
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       fontWeight:
@@ -866,7 +866,7 @@ class Explore extends GetWidget<ProductsList> {
                                                       GetX<ProductsList>(
                                                           builder: (context) {
                                                         return Text(
-                                                          'Total: ${numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
+                                                          'Total: ${details.numberFormat(details.counter * double.parse(elements[rando[index]]["precio"]))}',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -940,7 +940,7 @@ class Explore extends GetWidget<ProductsList> {
                             children: [
                               Container(
                                 child: Text(
-                                  '\$${price + ' ' + medida}',
+                                  '\$${details.numberFormat(price) + ' ' + medida}',
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -1077,16 +1077,5 @@ class Explore extends GetWidget<ProductsList> {
     return lista;
   }
 
-  String numberFormat(x) {
-    List<String> parts = x.toString().split('.');
-    RegExp re = RegExp(r'\B(?=(\d{3})+(?!\d))');
-
-    parts[0] = parts[0].replaceAll(re, '.');
-    if (parts.length == 1) {
-      parts.add('00');
-    } else {
-      parts[1] = parts[1].padRight(2, '0').substring(0, 2);
-    }
-    return parts.join(',');
-  }
+ 
 }

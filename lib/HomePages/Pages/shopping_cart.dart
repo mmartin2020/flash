@@ -35,11 +35,11 @@ class ShoppingCart extends StatelessWidget {
     "A021",
     "A022"
   ];
-  final List<Map<String, dynamic>> supercero = [];
+  final RxList<Widget> supercero = RxList();
 
   @override
   Widget build(BuildContext context) {
-    var total = 0;
+    var total = 0.0.obs;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -47,6 +47,7 @@ class ShoppingCart extends StatelessWidget {
             stream: stream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               bool state = true;
+             var  totales = 0.0;
               if (snapshot.hasError)
                 Center(
                   child: CircularProgressIndicator(),
@@ -58,16 +59,27 @@ class ShoppingCart extends StatelessWidget {
 
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.active) {
+            
                 final service = snapshot.data;
                 code.forEach((element) {
                   if (service[element][0] > 0) {
-                    supercero.add({
-                      'count': service[element][0],
-                      'name': service[element][2],
-                      'price': service[element][3],
-                      'image': service[element][4],
-                      'id': element,
-                    });
+
+                     int count = service[element][0];
+                      String title= service[element][2];
+                      String price = service[element][3];
+                      String image= service[element][4];
+                      String id = element;
+
+                      //toInt price
+                   final  priceInt = int.parse(price);
+                 
+                    totales = ( priceInt * count.toDouble() ) + totales   ;
+
+total=totales.obs;
+
+
+                    supercero.add( component(
+      id,  title,  price,  image,  count) );
                     state = false;
                   }
                 });
@@ -75,28 +87,58 @@ class ShoppingCart extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
                         height: 40.0,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                    
                           Container(
-                              child: Text(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
                             'Carrito de compra',
                             style: TextStyle(
-                                fontWeight: FontWeight.w800, fontSize: 18.0),
-                          )),
-                        ],
-                      ),
+                                    fontWeight: FontWeight.w800, fontSize: 20.0),
+                          ),
+
+                          IconButton(onPressed: (){
+                            Get.dialog(
+                              Stack(children: [Positioned(top: 45.0,right: 10.0,
+                                child:   GestureDetector(onTap: (){
+                                 supercero.clear();
+                                      Get.back();
+                                     
+
+
+                                    }, child:Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(width: 100.0,height: 30.0,child: 
+                             
+                                     Row(children: [Text('Vaciar carro'),Spacer(),Icon(Icons.delete_outline_outlined,color: Colors.grey,),]),
+                                      
+                                      ),
+                                    
+                                    ),
+                                  ),
+                                ),
+                              )
+                              
+                              ],
+                              
+                              ),
+                             barrierColor: Colors.transparent.withOpacity(0.0),
+                              );
+                          }, icon: Icon(Icons.more_vert_rounded))
+                                ],
+                              )),
+                        
                       SizedBox(
                         height: 40.0,
                       ),
                       state
                           ? Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Icon(Icons.info, size: 100, color: Colors.grey),
                                 Text(
@@ -108,21 +150,11 @@ class ShoppingCart extends StatelessWidget {
                           : Expanded(
                               child: Stack(
                                 children: [
-                                  ListView.builder(
-                                    itemCount: supercero.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      total = (supercero[index]["count"] * 1) +
-                                          total;
-
-                                      // int.parse(supercero[index]["price"])
-                                      return component(
-                                          supercero[index]["id"],
-                                          supercero[index]["name"],
-                                          supercero[index]["price"],
-                                          supercero[index]["image"],
-                                          supercero[index]["count"]);
-                                    },
+                                
+                                  GetX<ProductsList>(
+                                    builder: (context) {
+                                      return ListView(children: supercero,);
+                                    }
                                   ),
 
                                   // floating button
@@ -131,7 +163,7 @@ class ShoppingCart extends StatelessWidget {
                                     right: 0.0,
                                     child: Container(
                                       child: FloatingActionButton.extended(
-                                        onPressed: () => Get.toNamed('/pay'),
+                                        onPressed: () => Get.toNamed('/pay',arguments: total),
                                         label: Row(
                                           children: [
                                             Text('Ir a pagar ',
@@ -141,10 +173,14 @@ class ShoppingCart extends StatelessWidget {
                                             Icon(Icons.arrow_forward_ios_sharp,
                                                 size: 12.0,
                                                 color: Colors.white54),
-                                            Text('Total:  $total',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                            GetX<ProductsList>(
+                                              builder: (context) {
+                                                return Text('Total: \$${details.numberFormat(total) }',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold));
+                                              }
+                                            ),
                                           ],
                                         ),
                                         icon: Icon(Icons.payment_outlined),
@@ -169,56 +205,68 @@ class ShoppingCart extends StatelessWidget {
 
   Widget component(
       String id, String title, String price, String image, int count) {
-    return GestureDetector(
+return GestureDetector(
       onTap: () {
+         details.InitialState(count.obs);
         Get.defaultDialog(
           title: '',
-          content: Container(
-            width: 300,
-            height: 200,
-            child: Column(children: [
-              Spacer(),
-              Image(
-                image: AssetImage(image),
-                width: 50,
-                height: 50,
-              ),
-              Spacer(),
-              Text(
-                title,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      details.discrement(id, image, title, price);
-                    },
-                    icon: Icon(
-                      Icons.remove,
-                      size: 19.0,
-                    ),
+          content:  
+           Container(
+                width: 250,
+                height: 170,
+                child: Column(children: [
+                 Image(
+                        image: AssetImage(image),
+                        width: 50,
+                        height: 50,
+                      ),
+                      SizedBox(height: 20.0,),
+                  Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
-                  Text('$count',
-                      style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold)),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      details.increment(id, image, title, price);
-                    },
-                    icon: Icon(Icons.add, size: 19.0),
+                      SizedBox(height: 20.0,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          details.discrement(id, image, title, price);
+                         supercero.clear();
+
+                        },
+                        icon: Icon(
+                          Icons.remove,
+                          size: 19.0,
+                        ),
+                      ),
+                      SizedBox(height: 20.0,),
+
+                        GetX<ProductsList>(
+                          builder:(context) {
+                                 return Text('${details.counter}',
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold)
+                                );}
+                      ),
+                      SizedBox(height: 20.0,),
+                      IconButton(
+                        onPressed: () {
+                          details.increment(id, image, title, price);
+                           supercero.clear();
+                        },
+                        icon: Icon(Icons.add, size: 19.0),
+                      ),
+                    ],
                   ),
-                ],
+                ]),
+                decoration: BoxDecoration(color: Colors.white,),
               ),
-              Spacer(),
-            ]),
-            decoration: BoxDecoration(color: Colors.white),
-          ),
-        );
+
+             
+        
+     );
       },
       child: Center(
         child: Container(
@@ -248,45 +296,19 @@ class ShoppingCart extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '$count X    \$ $price ',
+                          '$count X    \$ ${details.numberFormat(price) } ',
                           style: TextStyle(
                               fontSize: 16.0, fontWeight: FontWeight.w500),
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     IconButton(
-                        //       onPressed: () {
-                        //         details.discrement(id, image, title, price);
-                        //       },
-                        //       icon: Icon(
-                        //         Icons.remove,
-                        //         size: 19.0,
-                        //       ),
-                        //     ),
-                        //     Text('$count',
-                        //         style: TextStyle(
-                        //             fontSize: 16.0, fontWeight: FontWeight.bold)),
-                        //     IconButton(
-                        //       onPressed: () {
-                        //         details.increment(id, image, title, price);
-                        //       },
-                        //       icon: Icon(Icons.add, size: 19.0),
-                        //     ),
-                        //   ],
-                        // ),
+                        
                       ],
                     ),
                   ],
                 ),
                 IconButton(
                     onPressed: () {
-                      FirebaseFirestore.instance
-                          .collection('cartshopping')
-                          .doc('OIUlHx3qVZZa2TIcCJAbs3NFiRg1')
-                          .update({
-                        id: [0, false, title, price, image]
-                      });
+                  details.cart_delete(id, false, title, price, image);
+                  supercero.clear();
                     },
                     icon: Icon(
                       Icons.close_outlined,
@@ -300,3 +322,4 @@ class ShoppingCart extends StatelessWidget {
     );
   }
 }
+

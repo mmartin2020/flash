@@ -39,8 +39,11 @@ dependencies:
   flutter_svg: ^0.22.0
   url_launcher: ^6.0.12
   google_maps_flutter: ^2.1.0
+  address_search_field: ^4.0.1
+  location: ^4.3.0
   # permission_handler: ^8.1.1
   # permission_handler: ^8.2.6
+
 
 
 

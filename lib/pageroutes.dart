@@ -5,6 +5,7 @@ import 'package:log/HomePages/Pages/shopView.dart';
 import 'HomePages/Pages/categoria.dart';
 import 'HomePages/Pages/condiciones.dart';
 import 'HomePages/Pages/home.dart';
+import 'HomePages/Pages/intheway.dart';
 import 'HomePages/Pages/masVendido.dart';
 import 'HomePages/Pages/mispedidos.dart';
 import 'HomePages/Pages/myfavorites.dart';
@@ -99,4 +100,13 @@ List<GetPage<dynamic>> routes = [
     page: () => Position(),
     title: 'Position',
   ),
+
+  GetPage(
+    name: '/intheway',
+    page: () => Intheway(),
+    title: 'Intheway',
+  ),
+
+
+  
 ];

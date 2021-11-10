@@ -1,25 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+import 'package:get/get.dart';
+import 'package:log/HomePages/Pages/intheway.dart';
+import 'package:log/account/Controllers/models/ProductsList.dart';
 
-class Pay extends StatelessWidget {
-  const Pay({Key? key}) : super(key: key);
+class Pay extends GetWidget<ProductsList> {
+   Pay({Key? key}) : super(key: key);
+  final details = Get.put(ProductsList());
 
   @override
   Widget build(BuildContext context) {
+    final total = Get.arguments;
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            if(details.radio ==2){
+            
+
+
+           Get.dialog(
+
+              Container(
+                child: Center(child: Icon(Icons.check_circle_outline_outlined,size: 350,color: Colors.green[100],),),
+                decoration: BoxDecoration(color: Colors.green),),
+                
+                transitionCurve: Curves.bounceInOut,
+                transitionDuration: Duration(seconds: 1));
+
+                Future.delayed(Duration(seconds: 3),()=> Get.toNamed('/intheway'));
+
+                
+            }
+          
+          },
           label: Text('Confirmar'),
         ),
         appBar: AppBar(
             elevation: 0.5,
+            
             automaticallyImplyLeading: false,
-            leading: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).primaryColor,
+            leading: IconButton(
+              onPressed: ()=>Get.back(),
+             icon:Icon(Icons.arrow_back),
+             
             ),
-            titleTextStyle: TextStyle(color: Theme.of(context).primaryColor),
-            backgroundColor: Colors.grey[50],
+           
+           
             title: Text('Confirmación de Pago',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0))),
         body: Padding(
@@ -46,38 +71,46 @@ class Pay extends StatelessWidget {
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
               SizedBox(height: 20.0),
-              RadioListTile(
-                value: 1,
-                groupValue: 1,
-                onChanged: (v) {
-                  print(v);
-                },
-                title: Text('Efectivo'),
+              GetBuilder<ProductsList>(
+                builder: (cn) {
+                  return RadioListTile<RxInt>(
+                    value: 2.obs,
+                    groupValue: cn.radio,
+                    onChanged: (v) {
+                      cn.changeRadioState(v);
+                    },
+                    title: Text('Efectivo'),
+                  );
+                }
               ),
-              RadioListTile(
-                  value: 2,
-                  groupValue: 1,
-                  onChanged: (v) {
-                    print(v);
-                  },
-                  subtitle: Row(
-                    children: [
-                      Icon(
-                        Icons.credit_card,
-                        size: 13.0,
-                        color: Colors.grey,
+              GetBuilder<ProductsList>(
+                builder: (cn) {
+                  return RadioListTile<RxInt>(
+                     value: 0.obs,
+                        groupValue: cn.radio,
+                        onChanged: (v) {
+                          cn.changeRadioState(v);
+                      },
+                      subtitle: Row(
+                        children: [
+                          Icon(
+                            Icons.credit_card,
+                            size: 13.0,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Icon(Icons.credit_card_sharp,
+                              size: 13.0, color: Colors.grey),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(Icons.credit_card_sharp,
-                          size: 13.0, color: Colors.grey),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                    ],
-                  ),
-                  title: Text('WebPay')),
+                      title: Text('WebPay'));
+                }
+              ),
               SizedBox(
                 height: 80,
               ),
@@ -90,7 +123,7 @@ class Pay extends StatelessWidget {
                     Text('Total a pagar',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18.0)),
-                    Text('\$45.898',
+                    Text('\$${details.numberFormat(total) }',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18.0)),
                   ],
